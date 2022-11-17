@@ -1,52 +1,174 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL.h>
+#include<stdbool.h>
+struct Case {
+    int id;
+    int posX;
+    int posY;
+    int voisinN;
+    int voisinE;
+    int voisinS;
+    int voisinO;
+    int voisinNE;
+    int voisinSE;
+    int voisinSO;
+    int voisinNO;
+    bool isEmpty;
+    struct Pion *pion;
+};
+
+struct Pion {
+    int id;
+    int equipe;
+    struct Case *pos;
+};
+
+struct Joueur {
+    int id;
+    int equipe;
+    int nbPion;
+};
+void affichagePlateau(int n,struct Case plateau[n][n]){
+    int i,j;
+    printf(" ");
+    for (i=1;i<n+1;i++){
+        printf(" %d",i);
+
+    }
+    for (i=1;i<(n+1);i++){
+        printf("\n");
+        printf("%d ",i);
+        for (j=1;j<n+1;j++){
+            if (plateau[i-1][j-1].isEmpty == true){
+                printf(" X");
+            }
+            else{
+                printf(" %d",plateau[i-1][j-1].pion->equipe);
+            }
+        }
+    }
+    printf("\n");
+    printf("---------------------");
+    printf("\n");
+}
+bool scorePoint(int n,struct Case plateau[n][n],int line,int column,int equipe){
+    int i,j,score;
+    // Allignement horizontal
+    for (i=0;i<n;i++){
+        if (plateau[line][i].isEmpty == false) {
+            if (plateau[line][i].pion->equipe == equipe) {
+                score++;
+            }
+            if (score == 4) {
+                return true;
+            }
+        }
+    }
+    // Allignement vertical
+    for (i=0;i<n;i++){
+        if (plateau[i][column].isEmpty == false) {
+            if (plateau[i][column].pion->equipe == equipe) {
+                score++;
+            }
+            if (score == 4) {
+                return true;
+            }
+        }
+    }
+    // Allignement diagonal haut gauche vers bas droite
+    for (i=0;i<n;i++){
+        for (j=0;j<n;j++){
+            if (i==j){
+                if (plateau[j][i].isEmpty == false) {
+                    if (plateau[j][i].pion->equipe == equipe) {
+                        score++;
+                    }
+                    if (score == 4) {
+                        printf("Bien ouej");
+                        return true;
+                    }
+                }
+            }
+        }
+    }
 
 
-void SDL_ExitWithError(const char *message);
+}
+void MultiJoueur(){
+    int n = 0,i,j;
+    printf("-> Veuillez saisir la longueur du cote du plateau : ");
+    scanf("%d", &n);
+    struct Case plateau[n][n];
+    struct Pion pions[4][4];
+    while (n < 4){
+        printf("-> Veuillez saisir une longueur supérieure ou égale à 4 : ");
+        scanf("%d", &n);
+    }
+    printf(" ");
+    for (i=1;i<n+1;i++){
+        printf(" %d",i);
 
-int main(int argc, char *argv[]){
-    SDL_Window *window = NULL;
-    SDL_Renderer *renderer = NULL;
+    }
+    for (i=1;i<(n+1);i++){
+        printf("\n");
+        printf("%d ",i);
+        for (j=1;j<n+1;j++){
+            plateau[i-1][j-1] = (struct Case){i*(n)+j+1,j,i,(i*j)-n,(i*j)+1,(i*j)+n,(i*j)-1,(i*j)-n+1,(i*j)+n+1,(i*j)+n-1,(i*j)-n-1,true};
+            printf(" X");
+        }
+    }
+    printf("\n");
+    printf("---------------------");
+    printf("\n");
+    struct Joueur joueur1 = (struct Joueur){1,1,0};
+    struct Joueur joueur2 = (struct Joueur){2,2,0};
+    while (joueur2.nbPion != 4 && joueur1.nbPion != 4){
+        printf("-> Joueur 1 : Veuillez saisir les coordonnées d'une case vide (x,y): ");
+        int x,y;
+        scanf("%d,%d", &x, &y);
+        while (x>n || y>n || x<1 || y<1){
+            printf("-> Veuillez saisir des coordonnées valides (x,y): ");
+            scanf("%d,%d", &x, &y);
+        };
+        while (plateau[y-1][x-1].isEmpty == false){
+            printf("-> Veuillez saisir les coordonnées d'une case vide (x,y): ");
+            scanf("%d,%d", &x, &y);
+        };
+        joueur1.nbPion++;
+        pions[joueur1.equipe-1][joueur1.nbPion-1] = (struct Pion){joueur1.nbPion,joueur1.equipe,&plateau[y-1][x-1]};
+        plateau[y-1][x-1].isEmpty = false;
+        plateau[y-1][x-1].pion = &pions[joueur1.equipe-1][joueur1.nbPion-1];
+        affichagePlateau(n,plateau);
+        scorePoint(n,plateau,y-1,x-1,joueur1.equipe);
+//        printf("-> Joueur 2 : Veuillez saisir les coordonnées d'une case vide (x,y): ");
+//        scanf("%d,%d", &x, &y);
+//        while (x>n || y>n || x<1 || y<1){
+//            printf("-> Veuillez saisir des coordonnées valides (x,y): ");
+//            scanf("%d,%d", &x, &y);
+//        };
+//        while (plateau[y-1][x-1].isEmpty == false){
+//            printf("-> Veuillez saisir les coordonnées d'une case vide (x,y): ");
+//            scanf("%d,%d", &x, &y);
+//        };
+//        joueur2.nbPion++;
+//        pions[joueur2.equipe-1][joueur2.nbPion-1] = (struct Pion){joueur2.nbPion,joueur2.equipe,&plateau[y-1][x-1]};
+//        plateau[y-1][x-1].isEmpty = false;
+//        plateau[y-1][x-1].pion = &pions[joueur2.equipe-1][joueur2.nbPion-1];
+//        affichagePlateau(n,plateau);
 
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
-        SDL_ExitWithError("Initialisation de la SDL");
 
-    window = SDL_CreateWindow("Teeko Games | SOUHAIT, DECKER & GLOTIN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, 0);
-
-    if(SDL_CreateWindowAndRenderer(800,600,0,&window,&renderer) != 0)
-        SDL_ExitWithError("Impossible de creer la fenetre et le renderer");
-
-    if(SDL_SetRenderDrawColor(renderer,112,168,237, SDL_ALPHA_OPAQUE) != 0)
-        SDL_ExitWithError("Impossible de changer la couleur du renderer");
-
-    if(SDL_RenderDrawPoint(renderer, 100, 450) != 0)
-        SDL_ExitWithError("Impossible de dessiner un point");
-
-    if(SDL_RenderDrawLine(renderer, 50, 50, 500, 500) != 0)
-        SDL_ExitWithError("Impossible de dessiner une ligne");
-
-    SDL_Rect rectangle;
-    rectangle.x = 300;
-    rectangle.y = 300;
-    rectangle.w = 200;
-    rectangle.h = 100;
-    if(SDL_RenderDrawRect(renderer, &rectangle) != 0)
-        SDL_ExitWithError("Impossible de dessiner un rectangle");
+    }
 
 
-    SDL_RenderPresent(renderer);
-    SDL_Delay(5000);
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
 
-    return EXIT_SUCCESS;
 }
 
-void SDL_ExitWithError(const char *message){
-    SDL_Log("ERREUR : %s > %s\n", message, SDL_GetError());
-    SDL_Quit();
-    exit(EXIT_FAILURE);
+
+
+
+int main()
+{
+    MultiJoueur();
+    return 0;
 }
