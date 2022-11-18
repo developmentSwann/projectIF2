@@ -16,18 +16,18 @@ struct Case {
     bool isEmpty;
     struct Pion *pion;
 };
-
 struct Pion {
     int id;
     int equipe;
     struct Case *pos;
 };
-
 struct Joueur {
     int id;
     int equipe;
     int nbPion;
+    int score;
 };
+
 void affichagePlateau(int n,struct Case plateau[n][n]){
     int i,j;
     printf(" ");
@@ -51,48 +51,163 @@ void affichagePlateau(int n,struct Case plateau[n][n]){
     printf("---------------------");
     printf("\n");
 }
-bool scorePoint(int n,struct Case plateau[n][n],int line,int column,int equipe){
-    int i,j,score;
-    // Allignement horizontal
-    for (i=0;i<n;i++){
-        if (plateau[line][i].isEmpty == false) {
-            if (plateau[line][i].pion->equipe == equipe) {
-                score++;
-            }
-            if (score == 4) {
-                return true;
-            }
-        }
-    }
-    // Allignement vertical
-    for (i=0;i<n;i++){
-        if (plateau[i][column].isEmpty == false) {
-            if (plateau[i][column].pion->equipe == equipe) {
-                score++;
-            }
-            if (score == 4) {
-                return true;
+
+bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,int posY){
+    //Allignement horizontal
+    //Check si le vosin de gauche est de la même équipe que la case actuelle tant qu'il y a un voisin de gauche de la même équipe, puis check si le voisin de droite est de la même équipe que la case actuelle tant qu'il y a un voisin de droite de la même équipe
+    int equipe = actualCase.pion->equipe;
+    int compteur = 0;
+    //Allignement horizontal
+    while (actualCase.voisinE != (n+1)+n*posY){
+        if (plateau[posY][posX+1].pion){
+            if (plateau[posY][posX+1].pion->equipe == equipe){
+
+            compteur = compteur + 1;
+            posX++;
+}           else{
+                break;
             }
         }
+        else{
+            break;
+        }
     }
-    // Allignement diagonal haut gauche vers bas droite
-    for (i=0;i<n;i++){
-        for (j=0;j<n;j++){
-            if (i==j){
-                if (plateau[j][i].isEmpty == false) {
-                    if (plateau[j][i].pion->equipe == equipe) {
-                        score++;
-                    }
-                    if (score == 4) {
-                        printf("Bien ouej");
-                        return true;
-                    }
-                }
+    while (actualCase.voisinO != (0)+n*posY){
+        if (plateau[posY][posX-1].pion){
+            if (plateau[posY][posX-1].pion->equipe == equipe){
+            compteur = compteur + 1;
+            posX--;
+}           else{
+                break;
             }
+
+        }
+        else{
+            break;
         }
     }
 
+    //Allignement vertical
+    while (actualCase.voisinN != (n+1)*posX){
+        if (plateau[posY+1][posX].pion){
+            if (plateau[posY+1][posX].pion->equipe == equipe){
+            compteur = compteur + 1;
+            posY++;
+}           else{
+                break;
+            }
+        }
+        else{
+            break;
+        }
+    }
+    while (actualCase.voisinS != (0)+n*posX){
+        if (plateau[posY-1][posX].pion){
+            if (plateau[posY-1][posX].pion->equipe == equipe){
+            compteur = compteur + 1;
+            posY--;
+}           else{
+                break;
+            }
+        }
+        else{
+            break;
+        }
+    }
 
+//    //Allignement diagonal haut droite
+//    while (actualCase.voisinNE != (n+1)+n*posY){
+//        if (plateau[posY+1][posX+1].pion){
+//            if (plateau[posY+1][posX+1].pion->equipe == equipe){
+//            compteur = compteur + 1;
+//            posY++;
+//            posX++;
+//}           else{
+//                break;
+//            }
+//        }
+//        else{
+//            break;
+//        }
+//    }
+//    while (actualCase.voisinSO != (0)+n*posY){
+//        if (plateau[posY-1][posX-1].pion){
+//            if (plateau[posY-1][posX-1].pion->equipe == equipe){
+//            compteur = compteur + 1;
+//            posY--;
+//            posX--;
+//}           else{
+//                break;
+//            }
+//        }
+//        else{
+//            break;
+//        }
+//    }
+//
+//    //Allignement diagonal haut gauche
+//    while (actualCase.voisinNO != (0)+n*posY){
+//        if (plateau[posY-1][posX+1].pion){
+//            if (plateau[posY-1][posX+1].pion->equipe == equipe){
+//            compteur = compteur + 1;
+//            posY--;
+//            posX++;
+//}           else{
+//                break;
+//            }
+//        }
+//        else{
+//            break;
+//        }
+//    }
+//    while (actualCase.voisinSE != (n+1)+n*posY){
+//        if (plateau[posY+1][posX-1].pion){
+//            if (plateau[posY+1][posX-1].pion->equipe == equipe){
+//            compteur = compteur + 1;
+//            posY++;
+//            posX--;
+//}           else{
+//                break;
+//            }
+//        }
+//        else{
+//            break;
+//        }
+//    }
+
+
+    if (compteur > 3) {
+        return true;
+    }
+    return false;
+
+
+}
+bool placePion(int n,struct Joueur *joueur, struct Case plateau[n][n], struct Pion pions[4][4]){
+    bool hasWin = false;
+    printf("-> Joueur %d : Veuillez saisir les coordonnées d'une case vide (x,y): ",joueur->equipe);
+    int x,y;
+    scanf("%d,%d", &x, &y);
+    while (x>n || y>n || x<1 || y<1){
+        printf("-> Veuillez saisir des coordonnées valides (x,y): ");
+        scanf("%d,%d", &x, &y);
+    };
+    while (plateau[y-1][x-1].isEmpty == false){
+        printf("-> Veuillez saisir les coordonnées d'une case vide (x,y): ");
+        scanf("%d,%d", &x, &y);
+    };
+    joueur->nbPion++;
+    pions[joueur->equipe-1][joueur->nbPion-1] = (struct Pion){joueur->nbPion,joueur->equipe,&plateau[y-1][x-1]};
+    plateau[y-1][x-1].isEmpty = false;
+    plateau[y-1][x-1].pion = &pions[joueur->equipe-1][joueur->nbPion-1];
+    affichagePlateau(n,plateau);
+    hasWin = scorePoint(n,plateau,plateau[y-1][x-1],x-1,y-1);
+    if (joueur->nbPion > 3){
+        if (hasWin == true){
+            printf("\nLe joueur %d a gagné",joueur->equipe);
+        }
+    }
+    return hasWin;
 }
 void MultiJoueur(){
     int n = 0,i,j;
@@ -113,50 +228,22 @@ void MultiJoueur(){
         printf("\n");
         printf("%d ",i);
         for (j=1;j<n+1;j++){
-            plateau[i-1][j-1] = (struct Case){i*(n)+j+1,j,i,(i*j)-n,(i*j)+1,(i*j)+n,(i*j)-1,(i*j)-n+1,(i*j)+n+1,(i*j)+n-1,(i*j)-n-1,true};
+            plateau[i-1][j-1] = (struct Case){i*(n)+j-n,j,i,(i*j)-n,(i*j)+1,(i*j)+n,(i*j)-1,(i*j)-n+1,(i*j)+n+1,(i*j)+n-1,(i*j)-n-1,true,NULL};
             printf(" X");
         }
     }
     printf("\n");
     printf("---------------------");
     printf("\n");
-    struct Joueur joueur1 = (struct Joueur){1,1,0};
-    struct Joueur joueur2 = (struct Joueur){2,2,0};
-    while (joueur2.nbPion != 4 && joueur1.nbPion != 4){
-        printf("-> Joueur 1 : Veuillez saisir les coordonnées d'une case vide (x,y): ");
-        int x,y;
-        scanf("%d,%d", &x, &y);
-        while (x>n || y>n || x<1 || y<1){
-            printf("-> Veuillez saisir des coordonnées valides (x,y): ");
-            scanf("%d,%d", &x, &y);
-        };
-        while (plateau[y-1][x-1].isEmpty == false){
-            printf("-> Veuillez saisir les coordonnées d'une case vide (x,y): ");
-            scanf("%d,%d", &x, &y);
-        };
-        joueur1.nbPion++;
-        pions[joueur1.equipe-1][joueur1.nbPion-1] = (struct Pion){joueur1.nbPion,joueur1.equipe,&plateau[y-1][x-1]};
-        plateau[y-1][x-1].isEmpty = false;
-        plateau[y-1][x-1].pion = &pions[joueur1.equipe-1][joueur1.nbPion-1];
-        affichagePlateau(n,plateau);
-        scorePoint(n,plateau,y-1,x-1,joueur1.equipe);
-//        printf("-> Joueur 2 : Veuillez saisir les coordonnées d'une case vide (x,y): ");
-//        scanf("%d,%d", &x, &y);
-//        while (x>n || y>n || x<1 || y<1){
-//            printf("-> Veuillez saisir des coordonnées valides (x,y): ");
-//            scanf("%d,%d", &x, &y);
-//        };
-//        while (plateau[y-1][x-1].isEmpty == false){
-//            printf("-> Veuillez saisir les coordonnées d'une case vide (x,y): ");
-//            scanf("%d,%d", &x, &y);
-//        };
-//        joueur2.nbPion++;
-//        pions[joueur2.equipe-1][joueur2.nbPion-1] = (struct Pion){joueur2.nbPion,joueur2.equipe,&plateau[y-1][x-1]};
-//        plateau[y-1][x-1].isEmpty = false;
-//        plateau[y-1][x-1].pion = &pions[joueur2.equipe-1][joueur2.nbPion-1];
-//        affichagePlateau(n,plateau);
 
-
+    struct Joueur joueur1 = (struct Joueur){1,1,0,0};
+    struct Joueur joueur2 = (struct Joueur){2,2,0,0};
+    bool hasWin = false;
+    while (joueur2.nbPion != 4 && joueur1.nbPion != 4 && hasWin == false){
+        hasWin = placePion(n,&joueur1,plateau,pions);
+        if (hasWin == false){
+            hasWin = placePion(n,&joueur2,plateau,pions);
+        }
     }
 
 
@@ -167,8 +254,11 @@ void MultiJoueur(){
 
 
 
+
+
 int main()
 {
     MultiJoueur();
     return 0;
+
 }
