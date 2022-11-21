@@ -58,7 +58,7 @@ bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,
     int equipe = actualCase.pion->equipe;
     int compteur = 0;
     //Allignement horizontal
-    while (actualCase.voisinE != (n+1)+n*posY){
+    while (actualCase.voisinE != 0){
         if (plateau[posY][posX+1].pion){
             if (plateau[posY][posX+1].pion->equipe == equipe){
 
@@ -72,7 +72,7 @@ bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,
             break;
         }
     }
-    while (actualCase.voisinO != (0)+n*posY){
+    while (actualCase.voisinO != 0){
         if (plateau[posY][posX-1].pion){
             if (plateau[posY][posX-1].pion->equipe == equipe){
             compteur = compteur + 1;
@@ -88,7 +88,7 @@ bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,
     }
 
     //Allignement vertical
-    while (actualCase.voisinN != (n+1)*posX){
+    while (actualCase.voisinN != 0){
         if (plateau[posY+1][posX].pion){
             if (plateau[posY+1][posX].pion->equipe == equipe){
             compteur = compteur + 1;
@@ -101,7 +101,7 @@ bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,
             break;
         }
     }
-    while (actualCase.voisinS != (0)+n*posX){
+    while (actualCase.voisinS != 0){
         if (plateau[posY-1][posX].pion){
             if (plateau[posY-1][posX].pion->equipe == equipe){
             compteur = compteur + 1;
@@ -114,6 +114,8 @@ bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,
             break;
         }
     }
+
+    printf("Compteur : %d",compteur);
 
 //    //Allignement diagonal haut droite
 //    while (actualCase.voisinNE != (n+1)+n*posY){
@@ -192,6 +194,7 @@ bool placePion(int n,struct Joueur *joueur, struct Case plateau[n][n], struct Pi
         printf("-> Veuillez saisir des coordonnées valides (x,y): ");
         scanf("%d,%d", &x, &y);
     };
+
     while (plateau[y-1][x-1].isEmpty == false){
         printf("-> Veuillez saisir les coordonnées d'une case vide (x,y): ");
         scanf("%d,%d", &x, &y);
@@ -228,7 +231,63 @@ void MultiJoueur(){
         printf("\n");
         printf("%d ",i);
         for (j=1;j<n+1;j++){
-            plateau[i-1][j-1] = (struct Case){i*(n)+j-n,j,i,(i*j)-n,(i*j)+1,(i*j)+n,(i*j)-1,(i*j)-n+1,(i*j)+n+1,(i*j)+n-1,(i*j)-n-1,true,NULL};
+            plateau[i-1][j-1] = (struct Case){i*(n)+j-n,j,i,0,0,0,0,0,0,0,0,true,NULL};
+            //Voisin nord = à 0 si on est sur la première ligne
+            if (i == 1){
+                plateau[i-1][j-1].voisinN = 0;
+            }
+            else{
+                plateau[i-1][j-1].voisinN = plateau[i-1][j-1].id -n;
+            }
+            //Voisin sud = à 0 si on est sur la dernière ligne
+            if (i == n){
+                plateau[i-1][j-1].voisinS = 0;
+            }
+            else{
+                plateau[i-1][j-1].voisinS = plateau[i-1][j-1].id +n;
+            }
+            //Voisin est = à 0 si on est sur la dernière colonne
+            if (j == n){
+                plateau[i-1][j-1].voisinE = 0;
+            }
+            else{
+                plateau[i-1][j-1].voisinE = plateau[i-1][j-1].id +1;
+            }
+            //Voisin ouest = à 0 si on est sur la première colonne
+            if (j == 1){
+                plateau[i-1][j-1].voisinO = 0;
+            }
+            else{
+                plateau[i-1][j-1].voisinO = plateau[i-1][j-1].id -1;
+            }
+            //Voisin nord-est = à 0 si on est sur la première ligne ou la dernière colonne
+            if (i == 1 || j == n){
+                plateau[i-1][j-1].voisinNE = 0;
+            }
+            else{
+                plateau[i-1][j-1].voisinNE = plateau[i-1][j-1].id -n +1;
+            }
+            //Voisin nord-ouest = à 0 si on est sur la première ligne ou la première colonne
+            if (i == 1 || j == 1){
+                plateau[i-1][j-1].voisinNO = 0;
+            }
+            else{
+                plateau[i-1][j-1].voisinNO = plateau[i-1][j-1].id -n -1;
+            }
+            //Voisin sud-est = à 0 si on est sur la dernière ligne ou la dernière colonne
+            if (i == n || j == n){
+                plateau[i-1][j-1].voisinSE = 0;
+            }
+            else{
+                plateau[i-1][j-1].voisinSE = plateau[i-1][j-1].id +n +1;
+            }
+            //Voisin sud-ouest = à 0 si on est sur la dernière ligne ou la première colonne
+            if (i == n || j == 1){
+                plateau[i-1][j-1].voisinSO = 0;
+            }
+            else{
+                plateau[i-1][j-1].voisinSO = plateau[i-1][j-1].id +n -1;
+            }
             printf(" X");
         }
     }
@@ -250,12 +309,6 @@ void MultiJoueur(){
 
 
 }
-
-
-
-
-
-
 int main()
 {
     MultiJoueur();
