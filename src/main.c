@@ -2,6 +2,13 @@
 #include <stdlib.h>
 #include<stdbool.h>
 #include <windows.h>
+#include <conio.h>
+#include <unistd.h>
+
+void clearScreen()
+{
+    system("cls");
+}
 
 struct Case {
     int id;
@@ -31,25 +38,29 @@ struct Joueur {
     int score;
     char icon;
     int color;
+    int posX;
+    int posY;
 };
 void textColor(int couleurDuTexte,int couleurDeFond)
 {
     HANDLE H=GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(H,couleurDeFond*16+couleurDuTexte);
 }
-void affichagePlateau(int n,struct Case plateau[n][n]){
-    int i,j;
-    printf(" ");
-    for (i=1;i<n+1;i++){
-        printf(" %d",i);
 
-    }
+
+void affichagePlateau(int n,struct Case plateau[n][n],int playerPosX,int playerPosY){
+    int i,j;
     for (i=1;i<(n+1);i++){
         printf("\n");
-        printf("%d ",i);
         for (j=1;j<n+1;j++){
+
             if (plateau[i-1][j-1].isEmpty == true){
+                if (i-1 == playerPosY && j-1 == playerPosX){
+                    textColor(4,0);
+                }
                 printf(" %c",(char)254)    ;
+                textColor(15,0);
+
             }
             else{
                 textColor(plateau[i-1][j-1].pion->equipe->color,0);
@@ -59,10 +70,39 @@ void affichagePlateau(int n,struct Case plateau[n][n]){
             }
         }
     }
-    printf("\n");
+    printf("\n\n");
     printf("---------------------");
     printf("\n");
+
 }
+int CaseSelector(int n,struct Case plateau[n][n], struct Joueur *joueur){
+    bool hasMoove = false;
+    do {
+        if (GetAsyncKeyState(VK_RIGHT)) {
+            joueur->posX++;
+            hasMoove = true ;
+        } else if (GetAsyncKeyState(VK_LEFT)) {
+            joueur->posX--;
+            hasMoove = true ;
+        } else if (GetAsyncKeyState(VK_UP)) {
+            joueur->posY--;
+            hasMoove = true ;
+        } else if (GetAsyncKeyState(VK_DOWN)) {
+            joueur->posY++;
+            hasMoove = true ;
+        }
+    }while (!hasMoove);{
+        if (joueur->posX < 0 || joueur->posX > n){
+            joueur->posX  = 0;
+        }else if (joueur->posY < 0 || joueur->posY > n){
+            joueur->posY = 0;
+        }
+
+    }
+    printf("[%d,%d]",joueur->posX,joueur->posY);
+    affichagePlateau(n, plateau,joueur->posX ,joueur->posY );
+}
+
 bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,int posY){
     int equipe = actualCase.pion->equipe->equipe;
     int compteur = 0;
@@ -286,35 +326,34 @@ bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,
     return false;
 
 }
-bool placePion(int n,struct Joueur *joueur, struct Case plateau[n][n], struct Pion pions[4][4]){
+
+
+bool placePion(int n,struct Joueur *joueur, struct Case plateau[n][n], struct Pion pions[4][4],bool *statut){
     bool hasWin = false;
-    printf("-> Joueur %d : Veuillez saisir les coordonnées d'une case vide (x,y): ",joueur->equipe);
-    int x,y;
-    scanf("%d,%d", &x, &y);
-    while (x>n || y>n || x<1 || y<1){
-        printf("-> Veuillez saisir des coordonnées valides (x,y): ");
-        scanf("%d,%d", &x, &y);
-    };
+    bool hasPlaced = false;
+    printf("-> Joueur %d, placez votre pion\n", joueur->equipe);
+    affichagePlateau(n, plateau, 0, 0);
+    do{
+        CaseSelector(n,plateau,joueur);
 
-    while (plateau[y-1][x-1].isEmpty == false){
-        printf("-> Veuillez saisir les coordonnées d'une case vide (x,y): ");
-        scanf("%d,%d", &x, &y);
-    };
-    joueur->nbPion++;
-    pions[joueur->equipe-1][joueur->nbPion-1] = (struct Pion){joueur->nbPion,joueur,&plateau[y-1][x-1]};
-    plateau[y-1][x-1].isEmpty = false;
-    plateau[y-1][x-1].pion = &pions[joueur->equipe-1][joueur->nbPion-1];
 
-    affichagePlateau(n,plateau);
-    hasWin = scorePoint(n,plateau,plateau[y-1][x-1],x-1,y-1);
-
-    if (joueur->nbPion > 3){
-        if (hasWin == true){
-            printf("\nLe joueur %d a gagné",joueur->equipe);
+    }while(!hasPlaced);{
+        if (joueur->nbPion > 3) {
+            if (hasWin == true) {
+                printf("\nLe joueur %d a gagné", joueur->equipe);
+            }
         }
+
+        return hasWin;
     }
-    return hasWin;
+
 }
+
+
+
+
+
+
 bool movePion(int n,struct Joueur *joueur, struct Case plateau[n][n], struct Pion pions[4][4]){
     printf("\033[1;31m");
     printf("\n-> Déplacement des pions");
@@ -345,7 +384,7 @@ bool movePion(int n,struct Joueur *joueur, struct Case plateau[n][n], struct Pio
     plateau[y2-1][x2-1].pion = plateau[y-1][x-1].pion;
     plateau[y-1][x-1].isEmpty = true;
     plateau[y-1][x-1].pion = NULL;
-    affichagePlateau(n,plateau);
+    affichagePlateau(n,plateau, 0, 0);
     return scorePoint(n,plateau,plateau[y2-1][x2-1],x2-1,y2-1);
 
 
@@ -362,14 +401,8 @@ void MultiJoueur(){
 
     struct Case plateau[n][n];
     struct Pion pions[4][4];
-    printf(" ");
-    for (i=1;i<n+1;i++){
-        printf(" %d",i);
-
-    }
     for (i=1;i<(n+1);i++){
         printf("\n");
-        printf("%d ",i);
         for (j=1;j<n+1;j++){
             plateau[i-1][j-1] = (struct Case){i*(n)+j-n,j,i,0,0,0,0,0,0,0,0,true,NULL};
             //Voisin nord = à 0 si on est sur la première ligne
@@ -428,7 +461,6 @@ void MultiJoueur(){
             else{
                 plateau[i-1][j-1].voisinSO = plateau[i-1][j-1].id +n -1;
             }
-            printf(" %c",(char)254);
         }
     }
     printf("\n");
@@ -436,26 +468,36 @@ void MultiJoueur(){
     printf("\n");
 
 
-    struct Joueur joueur1 = (struct Joueur){1,1,0,0,'X',12};
-    struct Joueur joueur2 = (struct Joueur){2,2,0,0,'O',2};
+    struct Joueur joueur1 = (struct Joueur){1,1,0,0,'X',12, 0,0};
+    struct Joueur joueur2 = (struct Joueur){2,2,0,0,'O',2,0,0};
     bool hasWin = false;
-    while (joueur2.nbPion != 4 && joueur1.nbPion != 4 && hasWin == false){
-        hasWin = placePion(n,&joueur1,plateau,pions);
-        if (hasWin == false){
-            hasWin = placePion(n,&joueur2,plateau,pions);
-        }
-    }
-    while (hasWin == false){
-            hasWin = movePion(n,&joueur1,plateau,pions);
-        if (hasWin == false){
-            hasWin = movePion(n,&joueur2,plateau,pions);
-            if (hasWin == true){
-                printf("Le joueur 2 a gagné !");
-            }
-        }else{
-            printf("Le joueur 1 a gagné !");
-        }
-    }
+    bool hasPlayed = false;
+    bool isPlaying = false;
+    hasWin = placePion(n,&joueur1,plateau,pions,&hasPlayed);
+
+//    while (joueur2.nbPion != 4 && joueur1.nbPion != 4 && hasWin == false && isPlaying == false){
+//        isPlaying = true;
+//        hasWin = placePion(n,&joueur1,plateau,pions,&hasPlayed);
+//        if (hasPlayed == true){
+//            if (hasWin == false){
+//                hasPlayed = false;
+//                hasWin = placePion(n,&joueur2,plateau,pions,&hasPlayed);
+//                isPlaying = false;
+//            }
+//        }
+//
+//    }
+//    while (hasWin == false){
+//            hasWin = movePion(n,&joueur1,plateau,pions);
+//        if (hasWin == false){
+//            hasWin = movePion(n,&joueur2,plateau,pions);
+//            if (hasWin == true){
+//                printf("Le joueur 2 a gagné !");
+//            }
+//        }else{
+//            printf("Le joueur 1 a gagné !");
+//        }
+//    }
 
 
 
