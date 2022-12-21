@@ -68,25 +68,25 @@ void affichagePlateau(int n,struct Case plateau[n][n],struct Joueur *joueur, int
             }
             else{
 
-                    textColor(plateau[i - 1][j - 1].pion->equipe->color, 0);
-                    if (i - 1 == playerPosY && j - 1 == playerPosX) {
-                        if (selecType == 0) {
-                            textColor(8, 0);
-                            printf(" %c", (char) 254);
-                        } else {
-                            if (plateau[i - 1][j - 1].pion->equipe->id == joueur->id) {
-                                textColor(1, 0);
-                            } else {
-                                textColor(8, 0);
-                            }
-                            printf(" %c", plateau[i - 1][j - 1].pion->equipe->icon);
-
-                        }
+                textColor(plateau[i - 1][j - 1].pion->equipe->color, 0);
+                if (i - 1 == playerPosY && j - 1 == playerPosX) {
+                    if (selecType == 0) {
+                        textColor(8, 0);
+                        printf(" %c", (char) 254);
                     } else {
+                        if (plateau[i - 1][j - 1].pion->equipe->id == joueur->id) {
+                            textColor(1, 0);
+                        } else {
+                            textColor(8, 0);
+                        }
                         printf(" %c", plateau[i - 1][j - 1].pion->equipe->icon);
+
                     }
-                    textColor(15, 0);
+                } else {
+                    printf(" %c", plateau[i - 1][j - 1].pion->equipe->icon);
                 }
+                textColor(15, 0);
+            }
 
 
         }
@@ -102,7 +102,8 @@ void affichagePlateau(int n,struct Case plateau[n][n],struct Joueur *joueur, int
 
 
 }
-bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,int posY){
+
+bool scorePoint2(int n,int x ,struct Case plateau[n][n],struct Case actualCase,int posX,int posY){
     int equipe = actualCase.pion->equipe->equipe;
     int compteur = 0;
     int defPosX = posX;
@@ -124,7 +125,7 @@ bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,
         actualCase = plateau[posY][posX];
     }
 
-    if (compteur >= 3){
+    if (compteur >= x-1){
         return true;
     }
     compteur = 0;
@@ -145,7 +146,7 @@ bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,
         posX--;
         actualCase = plateau[posY][posX];
     }
-    if (compteur >= 3){
+    if (compteur >= x-1){
         return true;
     }
     compteur = 0;
@@ -169,7 +170,7 @@ bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,
         posX--;
         actualCase = plateau[posY][posX];
     }
-    if (compteur >= 3){
+    if (compteur >= x-1){
         return true;
     }
     compteur = 0;
@@ -194,7 +195,7 @@ bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,
         posX++;
         actualCase = plateau[posY][posX];
     }
-    if (compteur >= 3){
+    if (compteur >= x-1){
         return true;
     }
     // Vérification de pions positionnés en carrés
@@ -207,7 +208,7 @@ bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,
     if (actualCase.voisinE != 0 && actualCase.voisinN != 0 && actualCase.voisinNE != 0 && plateau[posY-1][posX+1].pion != NULL && plateau[posY-1][posX+1].pion->equipe->equipe == equipe && plateau[posY][posX+1].pion != NULL && plateau[posY][posX+1].pion->equipe->equipe == equipe && plateau[posY-1][posX].pion != NULL && plateau[posY-1][posX].pion->equipe->equipe == equipe){
         compteur++;
     }
-    if (compteur >= 1){
+    if (compteur >= x-1){
         return true;
     }
     compteur = 0;
@@ -219,7 +220,7 @@ bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,
     if (actualCase.voisinO != 0 && actualCase.voisinN != 0 && actualCase.voisinNO != 0 && plateau[posY-1][posX-1].pion != NULL && plateau[posY-1][posX-1].pion->equipe->equipe == equipe && plateau[posY][posX-1].pion != NULL && plateau[posY][posX-1].pion->equipe->equipe == equipe && plateau[posY-1][posX].pion != NULL && plateau[posY-1][posX].pion->equipe->equipe == equipe){
         compteur++;
     }
-    if (compteur >= 1){
+    if (compteur >= x-1){
         return true;
     }
     compteur = 0;
@@ -231,7 +232,7 @@ bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,
     if (actualCase.voisinE != 0 && actualCase.voisinS != 0 && actualCase.voisinSE != 0 && plateau[posY+1][posX+1].pion != NULL && plateau[posY+1][posX+1].pion->equipe->equipe == equipe && plateau[posY][posX+1].pion != NULL && plateau[posY][posX+1].pion->equipe->equipe == equipe && plateau[posY+1][posX].pion != NULL && plateau[posY+1][posX].pion->equipe->equipe == equipe){
         compteur++;
     }
-    if (compteur >= 1){
+    if (compteur >= x-1){
         return true;
     }
     compteur = 0;
@@ -243,18 +244,19 @@ bool scorePoint(int n,struct Case plateau[n][n],struct Case actualCase,int posX,
     if (actualCase.voisinO != 0 && actualCase.voisinS != 0 && actualCase.voisinSO != 0 && plateau[posY+1][posX-1].pion != NULL && plateau[posY+1][posX-1].pion->equipe->equipe == equipe && plateau[posY][posX-1].pion != NULL && plateau[posY][posX-1].pion->equipe->equipe == equipe && plateau[posY+1][posX].pion != NULL && plateau[posY+1][posX].pion->equipe->equipe == equipe){
         compteur++;
     }
-    if (compteur >= 1){
+    if (compteur >= x-1){
         return true;
     }
 
-    if (compteur >= 3){
+    if (compteur >= x-1){
         return true;
     }
     return false;
 
+
 }
-//selecType = 0 pour placement des pions, 1 pour déplacement des pions
-void CaseSelector(int n,struct Case plateau[n][n], struct Joueur *joueur,struct Pion pions[4][4], int *posX, int *posY,int selecType){
+
+void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,struct Pion pions[2][p], int *posX, int *posY,int selecType){
     bool hasMoove = false;
     bool hasSelected = false;
     bool hasWin = false;
@@ -336,21 +338,14 @@ void CaseSelector(int n,struct Case plateau[n][n], struct Joueur *joueur,struct 
                         hasSelected = true;
                     }
                 }
-                sleep(0.5);
+                Sleep(0.5);
                 pressedScore = 0;
             }
         }
-
-
-
-
-
     }
 }
 
-
-
-bool placePion(int n,struct Joueur *joueur, struct Case plateau[n][n], struct Pion pions[4][4]){
+bool placePion2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,struct Pion pions[2][p],int x){
     bool hasWin = false;
     int posX,posY = 0;
     affichagePlateau(n, plateau,joueur,0);
@@ -358,41 +353,47 @@ bool placePion(int n,struct Joueur *joueur, struct Case plateau[n][n], struct Pi
     printf("---------------------");
     printf("\n");
     printf("-> Joueur %d, placez votre pion\n", joueur->equipe);
-    CaseSelector(n, plateau, joueur, pions,&posX, &posY,0);
-    hasWin = scorePoint(n,plateau,plateau[posY][posX],posX,posY);
+    CaseSelector2(n,p, plateau, joueur, pions,&posX, &posY,0);
+    hasWin = scorePoint2(n,x,plateau,plateau[posY][posX],posX,posY);
     {if (hasWin == true) {
-        printf("\nLe joueur %d a gagné", joueur->equipe);
-    }
+            printf("\nLe joueur %d a gagné", joueur->equipe);
+        }
         return hasWin;
     }
-
-
 }
 
-bool movePion(int n,struct Joueur *joueur, struct Case plateau[n][n], struct Pion pions[4][4]){
-    printf("\033[1;31m");
-    printf("\n-> Déplacement des pions");
-    printf("\033[0m");
-    //Sélectionne une case avec un pion du joueur actuel et déplace ce pion sur une case vide
-    int posX,posY,posX2,posY2 = 0;
+bool movePion2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,struct Pion pions[2][p],int x){
+    bool hasWin = false;
+    int posX,posY = 0;
     affichagePlateau(n, plateau,joueur,1);
     printf("\n");
     printf("---------------------");
     printf("\n");
-    printf("-> Joueur %d, choisissez votre pion\n", joueur->equipe);
-    CaseSelector(n, plateau, joueur, pions,&posX, &posY,1);
+    printf("-> Joueur %d, déplacez votre pion\n", joueur->equipe);
+    CaseSelector2(n,p, plateau, joueur, pions,&posX, &posY,1);
+    affichagePlateau(n, plateau,joueur,2);
     printf("\n");
     printf("---------------------");
     printf("\n");
-    printf("-> Joueur %d, choisissez la case de destination\n", joueur->equipe);
-    CaseSelector(n, plateau, joueur, pions,&posX, &posY,2);
-    return scorePoint(n,plateau,plateau[posY][posX],posX,posY);
-
-
-
-
-
+    printf("-> Joueur %d, déplacez votre pion\n", joueur->equipe);
+    CaseSelector2(n,p, plateau, joueur, pions,&posX, &posY,2);
+    hasWin = scorePoint2(n,x,plateau,plateau[posY][posX],posX,posY);
+    {if (hasWin == true) {
+            printf("\nLe joueur %d a gagné", joueur->equipe);
+        }
+        return hasWin;
+    }
 }
+
+
+
+
+
+
+
+
+
+
 //Fonction "CreatePlateau" qui automatise la création du plateau de jeu
 void CreatePlateau(int n, struct Case plateau[n][n]){
     int i,j;
@@ -465,26 +466,42 @@ void CreatePlateau(int n, struct Case plateau[n][n]){
 }
 
 
-void MultiJoueur(){
-    int n, i,j;;
-    while (n < 4){
-        printf("-> Veuillez saisir une longueur supérieure ou égale à 4 : ");
+void MultiJoueur2(){
+    int n,p, i,j;
+    do{
+        printf("\n-> Veuillez saisir une longueur supérieure ou égale à 4 : ");
         scanf("%d", &n);
-    }
+    }while (n < 4 || n < 0);
+    // On demande le nombre de pions strictement positif et inérieur à la longueur du plateau divisée par deux
+    do{
+        printf("\n-> Veuillez saisir le nombre de pions  strictement positif et inférieur à %d : ", n/2);
+        scanf("%d", &p);
+    }while (p < 1 || p > (n/2)-1);
+    //On demande le nombre de pions à aligner  positif et inférieur ou égal à p
+    int x;
+    do{
+        printf("\n-> Veuillez saisir le nombre de pions à aligner strictement positif et inférieur ou égal à %d : ", p);
+        scanf("%d", &x);
+    }while (x < 1 || x > p);
+
+
+
+
+
     //Création du plateau de jeu
     struct Case plateau[n][n];
     CreatePlateau(n, plateau);
-    struct Pion pions[4][4];
+    struct Pion pions[2][p];
 
     //Création des joueurs
     struct Joueur joueur1 = (struct Joueur){1,1,0,0,'X',12, 0,0,false};
     struct Joueur joueur2 = (struct Joueur){2,2,0,0,'O',2,0,0,false};
     bool hasWin = false;
     int winner= 0;
-    while (joueur2.nbPion <=3){
-            hasWin = placePion(n,&joueur1,plateau,pions);
+    while (joueur2.nbPion <= p-1){
+            hasWin = placePion2(n,p,plateau,&joueur1,pions,x);
             if (hasWin == false){
-                hasWin = placePion(n,&joueur2,plateau,pions);
+                hasWin = placePion2(n,p,plateau,&joueur2,pions,x);
                 if (hasWin){
                     winner = 2;
                     break;
@@ -497,9 +514,9 @@ void MultiJoueur(){
     do {
         if (hasWin)
             break;
-        hasWin = movePion(n,&joueur1,plateau,pions);
+        hasWin = movePion2(n,p,plateau,&joueur1,pions,x);
         if (hasWin == false){
-            hasWin = movePion(n,&joueur2,plateau,pions);
+            hasWin = movePion2(n,p,plateau,&joueur2,pions,x);
             if (hasWin){
                 winner = 2;
                 break;
@@ -513,13 +530,11 @@ void MultiJoueur(){
     printf("---------------------");
     printf("\n");
     printf("-> Le joueur %d a gagné\n", winner);
-    sleep(15);
+    Sleep(15);
 }
 
-
-void AIeval(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurCase[n][n]){
-    //Attribution de valeurs aux cases du plateau de jeu en fonction de la position des pions du joueur 1
-    int i,j;
+void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurCase[n][n],int nbPionAligner) {
+    int i, j;
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
             //Check si la case est occupée par un pion du joueur 1
@@ -529,131 +544,173 @@ void AIeval(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurCa
                     valeurCase[i - 1][j]++;
                 }
                 if (plateau[i][j].voisinS != 0 && plateau[i + 1][j].isEmpty == true) {
-                    valeurCase[i + 1][j] ++;
+                    valeurCase[i + 1][j]++;
                 }
                 if (plateau[i][j].voisinE != 0 && plateau[i][j + 1].isEmpty == true) {
-                    valeurCase[i][j + 1] ++;
+                    valeurCase[i][j + 1]++;
                 }
                 if (plateau[i][j].voisinO != 0 && plateau[i][j - 1].isEmpty == true) {
-                    valeurCase[i][j - 1] ++;
+                    valeurCase[i][j - 1]++;
                 }
                 if (plateau[i][j].voisinNE != 0 && plateau[i - 1][j + 1].isEmpty == true) {
-                    valeurCase[i - 1][j + 1] ++;
+                    valeurCase[i - 1][j + 1]++;
                 }
                 if (plateau[i][j].voisinNO != 0 && plateau[i - 1][j - 1].isEmpty == true) {
-                    valeurCase[i - 1][j - 1] ++;
+                    valeurCase[i - 1][j - 1]++;
                 }
                 if (plateau[i][j].voisinSE != 0 && plateau[i + 1][j + 1].isEmpty == true) {
-                    valeurCase[i + 1][j + 1] ++;
+                    valeurCase[i + 1][j + 1]++;
                 }
                 if (plateau[i][j].voisinSO != 0 && plateau[i + 1][j - 1].isEmpty == true) {
-                    valeurCase[i + 1][j - 1] ++;
+                    valeurCase[i + 1][j - 1]++;
                 }
                 //On check si le joueur 1 est entrain de former une diaonale avec deux pions, et si c'est le cas on incrémente la valeur des cases aux extrémités de la diagonale si elles sont libres
                 //Diagonale Nord-Est :
-                if (plateau[i][j].voisinNE != 0 && plateau[i - 1][j + 1].isEmpty == false && plateau[i - 1][j + 1].pion->equipe->equipe == 1) {
-                    if (plateau[i-1][j-1].voisinNE != 0 && plateau[i - 2][j + 2].isEmpty == true) {
-                        valeurCase[i - 2][j + 2] ++;
+                if (plateau[i][j].voisinNE != 0 && plateau[i - 1][j + 1].isEmpty == false &&
+                    plateau[i - 1][j + 1].pion->equipe->equipe == 1) {
+                    if (plateau[i - 1][j - 1].voisinNE != 0 && plateau[i - 2][j + 2].isEmpty == true) {
+                        valeurCase[i - 2][j + 2]++;
 
                     }
                     if (plateau[i][j].voisinSO != 0 && plateau[i + 1][j - 1].isEmpty == true) {
-                        valeurCase[i + 1][j - 1] ++;
+                        valeurCase[i + 1][j - 1]++;
                     }
                 }
                 //Diagonale Nord-Ouest :
-                if (plateau[i][j].voisinNO != 0 && plateau[i - 1][j - 1].isEmpty == false && plateau[i - 1][j - 1].pion->equipe->equipe == 1) {
-                    if (plateau[i-1][j+1].voisinNO != 0 && plateau[i - 2][j - 2].isEmpty == true) {
-                        valeurCase[i - 2][j - 2] ++;
+                if (plateau[i][j].voisinNO != 0 && plateau[i - 1][j - 1].isEmpty == false &&
+                    plateau[i - 1][j - 1].pion->equipe->equipe == 1) {
+                    if (plateau[i - 1][j + 1].voisinNO != 0 && plateau[i - 2][j - 2].isEmpty == true) {
+                        valeurCase[i - 2][j - 2]++;
                     }
                     if (plateau[i][j].voisinSE != 0 && plateau[i + 1][j + 1].isEmpty == true) {
-                        valeurCase[i + 1][j + 1] ++;
+                        valeurCase[i + 1][j + 1]++;
                     }
                 }
                 //Diagonale Sud-Est :
-                if (plateau[i][j].voisinSE != 0 && plateau[i + 1][j + 1].isEmpty == false && plateau[i + 1][j + 1].pion->equipe->equipe == 1) {
-                    if (plateau[i+1][j-1].voisinSE != 0 && plateau[i + 2][j + 2].isEmpty == true) {
-                        valeurCase[i + 2][j + 2] ++;
+                if (plateau[i][j].voisinSE != 0 && plateau[i + 1][j + 1].isEmpty == false &&
+                    plateau[i + 1][j + 1].pion->equipe->equipe == 1) {
+                    if (plateau[i + 1][j - 1].voisinSE != 0 && plateau[i + 2][j + 2].isEmpty == true) {
+                        valeurCase[i + 2][j + 2]++;
                     }
                     if (plateau[i][j].voisinNO != 0 && plateau[i - 1][j - 1].isEmpty == true) {
-                        valeurCase[i - 1][j - 1] ++;
+                        valeurCase[i - 1][j - 1]++;
                     }
                 }
                 //Diagonale Sud-Ouest :
-                if (plateau[i][j].voisinSO != 0 && plateau[i + 1][j - 1].isEmpty == false && plateau[i + 1][j - 1].pion->equipe->equipe == 1) {
-                    if (plateau[i+1][j+1].voisinSO != 0 && plateau[i + 2][j - 2].isEmpty == true) {
-                        valeurCase[i + 2][j - 2] ++;
+                if (plateau[i][j].voisinSO != 0 && plateau[i + 1][j - 1].isEmpty == false &&
+                    plateau[i + 1][j - 1].pion->equipe->equipe == 1) {
+                    if (plateau[i + 1][j + 1].voisinSO != 0 && plateau[i + 2][j - 2].isEmpty == true) {
+                        valeurCase[i + 2][j - 2]++;
                     }
                     if (plateau[i][j].voisinNE != 0 && plateau[i - 1][j + 1].isEmpty == true) {
-                        valeurCase[i - 1][j + 1] ++;
+                        valeurCase[i - 1][j + 1]++;
                     }
                 }
-                //On check si le joueur 1 a formé une ligne verticale avec 3 pions et si c'est le cas, on incrémente de 10000 la valeur de la case qu'il manque pour compléter la ligne de 4 si elle est libre
-                //En haut :
-                if (plateau[i][j].voisinN != 0 && plateau[i - 1][j].isEmpty == false && plateau[i - 1][j].pion->equipe->equipe == 1) {
-                    if (plateau[i-1][j].voisinN != 0  && plateau[i - 2][j].isEmpty == false && plateau[i - 2][j].pion->equipe->equipe == 1) {
-                        if (plateau[i-2][j].voisinN != 0 && plateau[i - 3][j].isEmpty == true) {
-                            valeurCase[i - 3][j] += 10000;
-                        }
-                    }
+                //On check si le joueur 1 a formé une ligne verticale avec nbPionAligner-1 pions et si c'est le cas, on incrémente de 1000 la valeur de la case qu'il manque pour compléter la ligne de nbPionAligner pions, si elle est libre
+                //Vers le Nord :
+                // On va vers le haut tant qu'il y a un voisin Nord différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                int compteur = 0;
+                int k = i;
+                while (plateau[k][j].voisinN != 0 && plateau[k][j].isEmpty == false && plateau[k][j].pion->equipe->equipe == 1) {
+                    compteur++;
+                    k--;
                 }
-                //En bas :
-                if (plateau[i][j].voisinS != 0 && plateau[i + 1][j].isEmpty == false && plateau[i + 1][j].pion->equipe->equipe == 1) {
-                    if (plateau[i+1][j].voisinS != 0  && plateau[i + 2][j].isEmpty == false && plateau[i + 2][j].pion->equipe->equipe == 1) {
-                        if (plateau[i+2][j].voisinS != 0 && plateau[i + 3][j].isEmpty == true) {
-                            valeurCase[i + 3][j] += 10000;
-                        }
-                    }
+                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 2 && plateau[k][j].isEmpty == true) {
+                    valeurCase[k][j] += 1000;
                 }
-                //A droite :
-                if (plateau[i][j].voisinE != 0 && plateau[i][j + 1].isEmpty == false && plateau[i][j + 1].pion->equipe->equipe == 1) {
-                    if (plateau[i][j+1].voisinE != 0  && plateau[i][j + 2].isEmpty == false && plateau[i][j + 2].pion->equipe->equipe == 1) {
-                        if (plateau[i][j+2].voisinE != 0 && plateau[i][j + 3].isEmpty == true) {
-                            valeurCase[i][j + 3] += 10000;
-                        }
-                    }
+                //Vers le Sud :
+                // On va vers le bas tant qu'il y a un voisin Sud différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                compteur = 0;
+                k = i;
+                while (plateau[k][j].voisinS != 0 && plateau[k][j].isEmpty == false && plateau[k][j].pion->equipe->equipe == 1) {
+                    compteur++;
+                    k++;
                 }
-                //A gauche :
-                if (plateau[i][j].voisinO != 0 && plateau[i][j - 1].isEmpty == false && plateau[i][j - 1].pion->equipe->equipe == 1) {
-                    if (plateau[i][j-1].voisinO != 0  && plateau[i][j - 2].isEmpty == false && plateau[i][j - 2].pion->equipe->equipe == 1) {
-                        if (plateau[i][j-2].voisinO != 0 && plateau[i][j - 3].isEmpty == true) {
-                            valeurCase[i][j - 3] += 10000;
-                        }
-                    }
+                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 2 && plateau[k][j].isEmpty == true) {
+                    valeurCase[k][j] += 1000;
                 }
-                //Diagonale Nord-Est :
-                if (plateau[i][j].voisinNE != 0 && plateau[i - 1][j + 1].isEmpty == false && plateau[i - 1][j + 1].pion->equipe->equipe == 1) {
-                    if (plateau[i-1][j+1].voisinNE != 0  && plateau[i - 2][j + 2].isEmpty == false && plateau[i - 2][j + 2].pion->equipe->equipe == 1) {
-                        if (plateau[i-2][j+2].voisinNE != 0 && plateau[i - 3][j + 3].isEmpty == true) {
-                            valeurCase[i - 3][j + 3] += 10000;
-                        }
-                    }
+                //Vers l'Est :
+                // On va vers la droite tant qu'il y a un voisin Est différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                compteur = 0;
+                k = j;
+                while (plateau[i][k].voisinE != 0 && plateau[i][k].isEmpty == false && plateau[i][k].pion->equipe->equipe == 1) {
+                    compteur++;
+                    k++;
+                }
+                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 2 && plateau[i][k].isEmpty == true) {
+                    valeurCase[i][k] += 1000;
+                }
+                //Vers l'Ouest :
+                // On va vers la gauche tant qu'il y a un voisin Ouest différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                compteur = 0;
+                k = j;
+                while (plateau[i][k].voisinO != 0 && plateau[i][k].isEmpty == false && plateau[i][k].pion->equipe->equipe == 1) {
+                    compteur++;
+                    k--;
+                }
+                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 2 && plateau[i][k].isEmpty == true) {
+                    valeurCase[i][k] += 1000;
                 }
                 //Diagonale Nord-Ouest :
-                if (plateau[i][j].voisinNO != 0 && plateau[i - 1][j - 1].isEmpty == false && plateau[i - 1][j - 1].pion->equipe->equipe == 1) {
-                    if (plateau[i-1][j-1].voisinNO != 0  && plateau[i - 2][j - 2].isEmpty == false && plateau[i - 2][j - 2].pion->equipe->equipe == 1) {
-                        if (plateau[i-2][j-2].voisinNO != 0 && plateau[i - 3][j - 3].isEmpty == true) {
-                            valeurCase[i - 3][j - 3] += 10000;
-                        }
-                    }
+                // On va vers la gauche et vers le haut tant qu'il y a un voisin Nord-Ouest différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                compteur = 0;
+                k = i;
+                int l = j;
+                while (plateau[k][l].voisinNO != 0 && plateau[k][l].isEmpty == false && plateau[k][l].pion->equipe->equipe == 1) {
+                    compteur++;
+                    k--;
+                    l--;
                 }
-                //Diagonale Sud-Est :
-                if (plateau[i][j].voisinSE != 0 && plateau[i + 1][j + 1].isEmpty == false && plateau[i + 1][j + 1].pion->equipe->equipe == 1) {
-                    if (plateau[i+1][j+1].voisinSE != 0  && plateau[i + 2][j + 2].isEmpty == false && plateau[i + 2][j + 2].pion->equipe->equipe == 1) {
-                        if (plateau[i+2][j+2].voisinSE != 0 && plateau[i + 3][j + 3].isEmpty == true) {
-                            valeurCase[i + 3][j + 3] += 10000;
-                        }
-                    }
+                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 2 && plateau[k][l].isEmpty == true) {
+                    valeurCase[k][l] += 1000;
+                }
+                //Diagonale Nord-Est :
+                // On va vers la droite et vers le haut tant qu'il y a un voisin Nord-Est différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                compteur = 0;
+                k = i;
+                l = j;
+                while (plateau[k][l].voisinNE != 0 && plateau[k][l].isEmpty == false && plateau[k][l].pion->equipe->equipe == 1) {
+                    compteur++;
+                    k--;
+                    l++;
+                }
+                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 2 && plateau[k][l].isEmpty == true) {
+                    valeurCase[k][l] += 1000;
                 }
                 //Diagonale Sud-Ouest :
-                if (plateau[i][j].voisinSO != 0 && plateau[i + 1][j - 1].isEmpty == false && plateau[i + 1][j - 1].pion->equipe->equipe == 1) {
-                    if (plateau[i+1][j-1].voisinSO != 0  && plateau[i + 2][j - 2].isEmpty == false && plateau[i + 2][j - 2].pion->equipe->equipe == 1) {
-                        if (plateau[i+2][j-2].voisinSO != 0 && plateau[i + 3][j - 3].isEmpty == true) {
-                            valeurCase[i + 3][j - 3] += 10000;
-                        }
-                    }
+                // On va vers la gauche et vers le bas tant qu'il y a un voisin Sud-Ouest différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                compteur = 0;
+                k = i;
+                l = j;
+                while (plateau[k][l].voisinSO != 0 && plateau[k][l].isEmpty == false && plateau[k][l].pion->equipe->equipe == 1) {
+                    compteur++;
+                    k++;
+                    l--;
                 }
-
-
+                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 2 && plateau[k][l].isEmpty == true) {
+                    valeurCase[k][l] += 1000;
+                }
+                //Diagonale Sud-Est :
+                // On va vers la droite et vers le bas tant qu'il y a un voisin Sud-Est différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                compteur = 0;
+                k = i;
+                l = j;
+                while (plateau[k][l].voisinSE != 0 && plateau[k][l].isEmpty == false && plateau[k][l].pion->equipe->equipe == 1) {
+                    compteur++;
+                    k++;
+                    l++;
+                }
+                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 2 && plateau[k][l].isEmpty == true) {
+                    valeurCase[k][l] += 1000;
+                }
             }
             //On check les cases qui sont occupées par un pion du robot
             if (plateau[i][j].isEmpty == false && plateau[i][j].pion->equipe->equipe == 2) {
@@ -682,80 +739,130 @@ void AIeval(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurCa
                 if (plateau[i][j].voisinSO != 0 && plateau[i + 1][j - 1].isEmpty == true) {
                     valeurCase[i + 1][j - 1]++;
                 }
-                //On check si le joueur 2 (robot) a déjà formé une ligne verticale de 3 pions, si c'est le cas, on incrémente de 1000 la valeur de la case qu'il manque pour compléter la ligne de 4 si elles sont libres
-                //Vers le haut
-                if (plateau[i][j].voisinN != 0 && plateau[i - 1][j].isEmpty == false && plateau[i - 1][j].pion->equipe->equipe == 2) {
-                    if (plateau[i-1][j].voisinN != 0 && plateau[i - 2][j].isEmpty == false && plateau[i - 2][j].pion->equipe->equipe == 2) {
-                        if (plateau[i-2][j].voisinN != 0 && plateau[i - 3][j].isEmpty == true) {
-                            valeurCase[i - 3][j] += 1000;
-                        }
-                    }
+                //On check si le joueur 2 (robot) a déjà formé une ligne verticale de nbPionAligner -1 pions, si c'est le cas, on incrémente de 10000 la valeur de la case qu'il manque pour compléter la ligne de nbPionAligner pions si elles sont libres
+                //Ligne Nord :
+                // On va vers le haut tant qu'il y a un voisin Nord différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                int compteur = 0;
+                int k = i;
+                int l = j;
+                while (plateau[k][l].voisinN != 0 && plateau[k][l].isEmpty == false && plateau[k][l].pion->equipe->equipe == 2) {
+                    compteur++;
+                    k--;
                 }
-                //Vers le bas
-                if (plateau[i][j].voisinS != 0 && plateau[i + 1][j].isEmpty == false && plateau[i + 1][j].pion->equipe->equipe == 2) {
-                    if (plateau[i+1][j].voisinS != 0 && plateau[i + 2][j].isEmpty == false && plateau[i + 2][j].pion->equipe->equipe == 2) {
-                        if (plateau[i+2][j].voisinS != 0 && plateau[i + 3][j].isEmpty == true) {
-                            valeurCase[i + 3][j] += 1000;
-                        }
-                    }
+                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
+                    valeurCase[k][l] += 10000;
                 }
-                //Vers la droite
-                if (plateau[i][j].voisinE != 0 && plateau[i][j + 1].isEmpty == false && plateau[i][j + 1].pion->equipe->equipe == 2) {
-                    if (plateau[i][j+1].voisinE != 0 && plateau[i][j + 2].isEmpty == false && plateau[i][j + 2].pion->equipe->equipe == 2) {
-                        if (plateau[i][j+2].voisinE != 0 && plateau[i][j + 3].isEmpty == true) {
-                            valeurCase[i][j + 3] += 1000;
-                        }
-                    }
+                //Ligne Sud :
+                // On va vers le bas tant qu'il y a un voisin Sud différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                compteur = 0;
+                k = i;
+                l = j;
+                while (plateau[k][l].voisinS != 0 && plateau[k][l].isEmpty == false && plateau[k][l].pion->equipe->equipe == 2) {
+                    compteur++;
+                    k++;
                 }
-                //Vers la gauche
-                if (plateau[i][j].voisinO != 0 && plateau[i][j - 1].isEmpty == false && plateau[i][j - 1].pion->equipe->equipe == 2) {
-                    if (plateau[i][j-1].voisinO != 0 && plateau[i][j - 2].isEmpty == false && plateau[i][j - 2].pion->equipe->equipe == 2) {
-                        if (plateau[i][j-2].voisinO != 0 && plateau[i][j - 3].isEmpty == true) {
-                            valeurCase[i][j - 3] += 1000;
-                        }
-                    }
+                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
+                    valeurCase[k][l] += 10000;
                 }
-                //Diagonale Nord-Est :
-                if (plateau[i][j].voisinNE != 0 && plateau[i - 1][j + 1].isEmpty == false && plateau[i - 1][j + 1].pion->equipe->equipe == 2) {
-                    if (plateau[i-1][j+1].voisinNE != 0 && plateau[i - 2][j + 2].isEmpty == false && plateau[i - 2][j + 2].pion->equipe->equipe == 2) {
-                        if (plateau[i-2][j+2].voisinNE != 0 && plateau[i - 3][j + 3].isEmpty == true) {
-                            valeurCase[i - 3][j + 3] += 1000;
-                        }
-                    }
+                //Ligne Est :
+                // On va vers la droite tant qu'il y a un voisin Est différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                compteur = 0;
+                k = i;
+                l = j;
+                while (plateau[k][l].voisinE != 0 && plateau[k][l].isEmpty == false && plateau[k][l].pion->equipe->equipe == 2) {
+                    compteur++;
+                    l++;
                 }
-                //Diagonale Nord-Ouest :
-                if (plateau[i][j].voisinNO != 0 && plateau[i - 1][j - 1].isEmpty == false && plateau[i - 1][j - 1].pion->equipe->equipe == 2) {
-                    if (plateau[i-1][j-1].voisinNO != 0 && plateau[i - 2][j - 2].isEmpty == false && plateau[i - 2][j - 2].pion->equipe->equipe == 2) {
-                        if (plateau[i-2][j-2].voisinNO != 0 && plateau[i - 3][j - 3].isEmpty == true) {
-                            valeurCase[i - 3][j - 3] += 1000;
-                        }
-                    }
+                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
+                    valeurCase[k][l] += 10000;
                 }
-                //Diagonale Sud-Est :
-                if (plateau[i][j].voisinSE != 0 && plateau[i + 1][j + 1].isEmpty == false && plateau[i + 1][j + 1].pion->equipe->equipe == 2) {
-                    if (plateau[i+1][j+1].voisinSE != 0 && plateau[i + 2][j + 2].isEmpty == false && plateau[i + 2][j + 2].pion->equipe->equipe == 2) {
-                        if (plateau[i+2][j+2].voisinSE != 0 && plateau[i + 3][j + 3].isEmpty == true) {
-                            valeurCase[i + 3][j + 3] += 1000;
-                        }
-                    }
+                //Ligne Ouest :
+                // On va vers la gauche tant qu'il y a un voisin Ouest différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                compteur = 0;
+                k = i;
+                l = j;
+                while (plateau[k][l].voisinO != 0 && plateau[k][l].isEmpty == false && plateau[k][l].pion->equipe->equipe == 2) {
+                    compteur++;
+                    l--;
                 }
-                //Diagonale Sud-Ouest :
-                if (plateau[i][j].voisinSO != 0 && plateau[i + 1][j - 1].isEmpty == false && plateau[i + 1][j - 1].pion->equipe->equipe == 2) {
-                    if (plateau[i+1][j-1].voisinSO != 0 && plateau[i + 2][j - 2].isEmpty == false && plateau[i + 2][j - 2].pion->equipe->equipe == 2) {
-                        if (plateau[i+2][j-2].voisinSO != 0 && plateau[i + 3][j - 3].isEmpty == true) {
-                            valeurCase[i + 3][j - 3] += 1000;
-                        }
-                    }
+                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
+                    valeurCase[k][l] += 10000;
                 }
+                //Ligne Nord-Est :
+                // On va vers le haut et la droite tant qu'il y a un voisin Nord-Est différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                compteur = 0;
+                k = i;
+                l = j;
+                while (plateau[k][l].voisinNE != 0 && plateau[k][l].isEmpty == false && plateau[k][l].pion->equipe->equipe == 2) {
+                    compteur++;
+                    k--;
+                    l++;
+                }
+                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
+                    valeurCase[k][l] += 10000;
+                }
+                //Ligne Nord-Ouest :
+                // On va vers le haut et la gauche tant qu'il y a un voisin Nord-Ouest différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                compteur = 0;
+                k = i;
+                l = j;
+                while (plateau[k][l].voisinNO != 0 && plateau[k][l].isEmpty == false && plateau[k][l].pion->equipe->equipe == 2) {
+                    compteur++;
+                    k--;
+                    l--;
+                }
+                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
+                    valeurCase[k][l] += 10000;
+                }
+                //Ligne Sud-Est :
+                // On va vers le bas et la droite tant qu'il y a un voisin Sud-Est différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                compteur = 0;
+                k = i;
+                l = j;
+                while (plateau[k][l].voisinSE != 0 && plateau[k][l].isEmpty == false && plateau[k][l].pion->equipe->equipe == 2) {
+                    compteur++;
+                    k++;
+                    l++;
+                }
+                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
+                    valeurCase[k][l] += 10000;
+                }
+                //Ligne Sud-Ouest :
+                // On va vers le bas et la gauche tant qu'il y a un voisin Sud-Ouest différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                compteur = 0;
+                k = i;
+                l = j;
+                while (plateau[k][l].voisinSO != 0 && plateau[k][l].isEmpty == false && plateau[k][l].pion->equipe->equipe == 2) {
+                    compteur++;
+                    k++;
+                    l--;
+                }
+                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
+                    valeurCase[k][l] += 10000;
+                }
+
+
+
+
+
             }
         }
     }
 }
+
 //Fonction "placePionIA", qui permet de placer les pions de l'IA de manière intelligente afin de bloquer le joueur 1 (détection du placement des pions du joueur 1 et prise de décision) et de gagner le plus rapidement possible (détection des pions du robot et prise de décision)
 //Dans un premier temps, l'intelligence artificelle analyse le placement des pions du joueur 1, et attribue une valeur à chaque case du plateau de jeu en fonction de la position des pions du joueur 1, (+ il peut bloquer le joueur 1 dans sa progression, + la valeur de la case est élevée)
 // Dans un second temps, l'intelligence artificielle analyse la position des pions du joueur 2 (robot), et attribue une valeur à chaque case du plateau de jeu en fonction de la position des pions du joueur 2 (+ le robot peut se rapprocher de la victoire, + la valeur de la case est élevée)
 // Enfin, l'intelligence artificielle compare les valeurs des cases du plateau de jeu, et place le pion de l'IA sur la case qui a la valeur la plus élevée
-bool placePionIA(int n, struct Joueur *joueur, struct Case plateau[n][n], struct Pion pions[4][4]) {
+bool placePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n], struct Pion pions[2][p], int NbPionAligner) {
 
     int i, j;
     int valeurCase[n][n];
@@ -767,7 +874,9 @@ bool placePionIA(int n, struct Joueur *joueur, struct Case plateau[n][n], struct
         }
 
     }
-    AIeval(n, plateau,*joueur, valeurCase);
+    printf("Test");
+    AIeval2(n, plateau,*joueur, valeurCase, NbPionAligner);
+    printf("Test2");
 
     //On évalue les cases qui ont le plus de valeur et on pose un pion sur la case qui a la plus grande valeur (si la case est vide)
     int max = 0;
@@ -802,7 +911,7 @@ bool placePionIA(int n, struct Joueur *joueur, struct Case plateau[n][n], struct
 
     //On check si le BOT a gagné grâce à la fonction scorePoint
     bool hasWin = false;
-    hasWin = scorePoint(n,plateau,plateau[botPosY][botPosX],botPosX,botPosY);
+    hasWin = scorePoint2(n,NbPionAligner,plateau,plateau[botPosY][botPosX],botPosX,botPosY);
     // On réinitialise les valeurs des cases
     for (i = 0; i < n; i++) {
         printf("\n");
@@ -822,7 +931,7 @@ bool placePionIA(int n, struct Joueur *joueur, struct Case plateau[n][n], struct
 //Ici, on procède à une double évaluation, car il faut aussi évaluer le meilleur pion à déplacer.  Pour cela on analyse si il ne s'agit pas d'une case qui permet déjà de bloquer le joueur 1 ou de gagner le jeu pour le joueur 2
 
 
-bool movePionIA(int n, struct Joueur *joueur, struct Case plateau[n][n], struct Pion pions[4][4]) {
+bool movePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n], struct Pion pions[2][p], int x) {
     //D'abord on évalue le pion à déplacer
     int i, j, k, l;
     int valeurCase[n][n];
@@ -860,56 +969,109 @@ bool movePionIA(int n, struct Joueur *joueur, struct Case plateau[n][n], struct 
                 valeurPion[i] --;
             }
         }
-        // Si le pion a comme voisin de droite une ligne horizontale de 3 pions du joueur 1, alors on lui attribue une valeur négative égale à -1000
-        if (botPosX < n - 3) {
-            if (plateau[botPosY][botPosX + 1].isEmpty == false && plateau[botPosY][botPosX + 2].isEmpty == false && plateau[botPosY][botPosX + 3].isEmpty == false && plateau[botPosY][botPosX + 1].pion->equipe->equipe == 1 && plateau[botPosY][botPosX + 2].pion->equipe->equipe == 1 && plateau[botPosY][botPosX + 3].pion->equipe->equipe == 1) {
-                valeurPion[i] --;
+        // Si le pion a comme voisin de droite une ligne horizontale de x-1 pions du joueur 1, alors on lui attribue une valeur négative égale à -1000
+        //Vers la droite
+        if (botPosX < n - x) {
+            int score = 0;
+            for (k = 1; k < x; k++) {
+                if (plateau[botPosY][botPosX + k].isEmpty == false && plateau[botPosY][botPosX + k].pion->equipe->equipe == 1) {
+                    score++;
+                }
+            }
+            if (score == x - 1) {
+                valeurPion[i] -= 1000;
             }
         }
-         //Si le pion a comme voisin de gauche une ligne horizontale de 3 pions du joueur 1, alors on lui attribue une valeur négative égale à -1000
-        if (botPosX > 2) {
-            if (plateau[botPosY][botPosX - 1].isEmpty == false && plateau[botPosY][botPosX - 2].isEmpty == false && plateau[botPosY][botPosX - 3].isEmpty == false && plateau[botPosY][botPosX - 1].pion->equipe->equipe == 1 && plateau[botPosY][botPosX - 2].pion->equipe->equipe == 1 && plateau[botPosY][botPosX - 3].pion->equipe->equipe == 1) {
-                valeurPion[i] --;
+        // Si le pion a comme voisin de gauche une ligne horizontale de x-1 pions du joueur 1, alors on lui attribue une valeur négative égale à -1000
+        //Vers la gauche
+        if (botPosX > x - 2) {
+            int score = 0;
+            for (k = 1; k < x; k++) {
+                if (plateau[botPosY][botPosX - k].isEmpty == false && plateau[botPosY][botPosX - k].pion->equipe->equipe == 1) {
+                    score++;
+                }
+            }
+            if (score == x - 1) {
+                valeurPion[i] -= 1000;
             }
         }
-        //Si le pion a comme voisin du haut une ligne verticale de 3 pions du joueur 1, alors on lui attribue une valeur négative égale à -1000
-        if (botPosY > 2) {
-            if (plateau[botPosY - 1][botPosX].isEmpty == false && plateau[botPosY - 2][botPosX].isEmpty == false && plateau[botPosY - 3][botPosX].isEmpty == false && plateau[botPosY - 1][botPosX].pion->equipe->equipe == 1 && plateau[botPosY - 2][botPosX].pion->equipe->equipe == 1 && plateau[botPosY - 3][botPosX].pion->equipe->equipe == 1) {
-                valeurPion[i] = valeurPion[i] - 1000;
+        //Vers le haut
+        if (botPosY > x - 2) {
+            int score = 0;
+            for (k = 1; k < x; k++) {
+                if (plateau[botPosY - k][botPosX].isEmpty == false && plateau[botPosY - k][botPosX].pion->equipe->equipe == 1) {
+                    score++;
+                }
+            }
+            if (score == x - 1) {
+                valeurPion[i] -= 1000;
             }
         }
-        //Si le pion a comme voisin du bas une ligne verticale de 3 pions du joueur 1, alors on lui attribue une valeur négative égale à -1000
-        if (botPosY < n - 3) {
-            if (plateau[botPosY + 1][botPosX].isEmpty == false && plateau[botPosY + 2][botPosX].isEmpty == false && plateau[botPosY + 3][botPosX].isEmpty == false && plateau[botPosY + 1][botPosX].pion->equipe->equipe == 1 && plateau[botPosY + 2][botPosX].pion->equipe->equipe == 1 && plateau[botPosY + 3][botPosX].pion->equipe->equipe == 1) {
-                valeurPion[i] = valeurPion[i] - 1000;
+        //Vers le bas
+        if (botPosY < n - x) {
+            int score = 0;
+            for (k = 1; k < x; k++) {
+                if (plateau[botPosY + k][botPosX].isEmpty == false && plateau[botPosY + k][botPosX].pion->equipe->equipe == 1) {
+                    score++;
+                }
+            }
+            if (score == x - 1) {
+                valeurPion[i] -= 1000;
             }
         }
-        //Si le pion a comme voisin du haut à droite une diagonale de 3 pions du joueur 1, alors on lui attribue une valeur négative égale à -1000
-        if (botPosX < n - 3 && botPosY > 2) {
-            if (plateau[botPosY - 1][botPosX + 1].isEmpty == false && plateau[botPosY - 2][botPosX + 2].isEmpty == false && plateau[botPosY - 3][botPosX + 3].isEmpty == false && plateau[botPosY - 1][botPosX + 1].pion->equipe->equipe == 1 && plateau[botPosY - 2][botPosX + 2].pion->equipe->equipe == 1 && plateau[botPosY - 3][botPosX + 3].pion->equipe->equipe == 1) {
-                valeurPion[i] = valeurPion[i] - 1000;
+        //Diagonale haut gauche
+        if (botPosX > x - 2 && botPosY > x - 2) {
+            int score = 0;
+            for (k = 1; k < x; k++) {
+                if (plateau[botPosY - k][botPosX - k].isEmpty == false && plateau[botPosY - k][botPosX - k].pion->equipe->equipe == 1) {
+                    score++;
+                }
+            }
+            if (score == x - 1) {
+                valeurPion[i] -= 1000;
             }
         }
-        //Si le pion a comme voisin du bas à gauche une diagonale de 3 pions du joueur 1, alors on lui attribue une valeur négative égale à -1000
-        if (botPosX > 2 && botPosY < n - 3) {
-            if (plateau[botPosY + 1][botPosX - 1].isEmpty == false && plateau[botPosY + 2][botPosX - 2].isEmpty == false && plateau[botPosY + 3][botPosX - 3].isEmpty == false && plateau[botPosY + 1][botPosX - 1].pion->equipe->equipe == 1 && plateau[botPosY + 2][botPosX - 2].pion->equipe->equipe == 1 && plateau[botPosY + 3][botPosX - 3].pion->equipe->equipe == 1) {
-                valeurPion[i] = valeurPion[i] - 1000;
+        //Diagonale haut droite
+        if (botPosX < n - x && botPosY > x - 2) {
+            int score = 0;
+            for (k = 1; k < x; k++) {
+                if (plateau[botPosY - k][botPosX + k].isEmpty == false && plateau[botPosY - k][botPosX + k].pion->equipe->equipe == 1) {
+                    score++;
+                }
+            }
+            if (score == x - 1) {
+                valeurPion[i] -= 1000;
             }
         }
-        //Si le pion a comme voisin du haut à gauche une diagonale de 3 pions du joueur 1, alors on lui attribue une valeur négative égale à -1000
-        if (botPosX > 2 && botPosY > 2) {
-            if (plateau[botPosY - 1][botPosX - 1].isEmpty == false && plateau[botPosY - 2][botPosX - 2].isEmpty == false && plateau[botPosY - 3][botPosX - 3].isEmpty == false && plateau[botPosY - 1][botPosX - 1].pion->equipe->equipe == 1 && plateau[botPosY - 2][botPosX - 2].pion->equipe->equipe == 1 && plateau[botPosY - 3][botPosX - 3].pion->equipe->equipe == 1) {
-                valeurPion[i] = valeurPion[i] - 1000;
+        //Diagonale bas gauche
+        if (botPosX > x - 2 && botPosY < n - x) {
+            int score = 0;
+            for (k = 1; k < x; k++) {
+                if (plateau[botPosY + k][botPosX - k].isEmpty == false && plateau[botPosY + k][botPosX - k].pion->equipe->equipe == 1) {
+                    score++;
+                }
+            }
+            if (score == x - 1) {
+                valeurPion[i] -= 1000;
             }
         }
-        //Si le pion a comme voisin du bas à droite une diagonale de 3 pions du joueur 1, alors on lui attribue une valeur négative égale à -1000
-        if (botPosX < n - 3 && botPosY < n - 3) {
-            if (plateau[botPosY + 1][botPosX + 1].isEmpty == false && plateau[botPosY + 2][botPosX + 2].isEmpty == false && plateau[botPosY + 3][botPosX + 3].isEmpty == false && plateau[botPosY + 1][botPosX + 1].pion->equipe->equipe == 1 && plateau[botPosY + 2][botPosX + 2].pion->equipe->equipe == 1 && plateau[botPosY + 3][botPosX + 3].pion->equipe->equipe == 1) {
-                valeurPion[i] = valeurPion[i] - 1000;
+        //Diagonale bas droite
+        if (botPosX < n - x && botPosY < n - x) {
+            int score = 0;
+            for (k = 1; k < x; k++) {
+                if (plateau[botPosY + k][botPosX + k].isEmpty == false && plateau[botPosY + k][botPosX + k].pion->equipe->equipe == 1) {
+                    score++;
+                }
+            }
+            if (score == x - 1) {
+                valeurPion[i] -= 1000;
             }
         }
+
+
+
     }
-    sleep(1);
+    Sleep(1);
 
     // On cherche le pion avec la plus grande valeur
     for (i = 0; i < 4; i++) {
@@ -918,11 +1080,11 @@ bool movePionIA(int n, struct Joueur *joueur, struct Case plateau[n][n], struct 
             pionMax = i;
         }
     }
-    sleep(1);
+    Sleep(1);
 
     //Comme dans la fonction "placePionIA" on évalue les cases en fonction du placement des pions du joueur 1
-    AIeval(n,plateau,*joueur,valeurCase);
-    sleep(1);
+    AIeval2(n,plateau,*joueur,valeurCase,x);
+    Sleep(1);
 
     //On évalue les cases qui ont le plus de valeur et on pose un pion sur la case qui a la plus grande valeur (si la case est vide)
     int max = 0;
@@ -936,7 +1098,7 @@ bool movePionIA(int n, struct Joueur *joueur, struct Case plateau[n][n], struct 
             }
         }
     }
-    sleep(1);
+    Sleep(1);
     //On déplace le pion avec la plus grande valeur sur la case qui a la plus grande valeur
     int oldPosX = pions[joueur->equipe - 1][pionMax].pos->posX -1;
     int oldPosY = pions[joueur->equipe - 1][pionMax].pos->posY -1;
@@ -947,7 +1109,7 @@ bool movePionIA(int n, struct Joueur *joueur, struct Case plateau[n][n], struct 
     pions[joueur->equipe - 1][pionMax].pos->posX = botPosX + 1;
     pions[joueur->equipe - 1][pionMax].pos->posY = botPosY + 1;
     bool hasWin = false;
-    hasWin = scorePoint(n,plateau,plateau[botPosY][botPosX],botPosX,botPosY);
+    hasWin = scorePoint2(n,x,plateau,plateau[botPosY][botPosX],botPosX,botPosY);
     // On réinitialise les valeurs des cases
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
@@ -961,43 +1123,52 @@ bool movePionIA(int n, struct Joueur *joueur, struct Case plateau[n][n], struct 
     return hasWin;
 }
 
-void IA(){
-    int n, i,j;;
-    while (n < 4){
-        printf("-> Veuillez saisir une longueur supérieure ou égale à 4 : ");
+void IA2() {
+    int x, n, i, j, p;
+    do {
+        printf("\n-> Veuillez saisir une longueur supérieure ou égale à 4 : ");
         scanf("%d", &n);
-    }
+    } while (n < 4 || n < 0);
+    // On demande le nombre de pions strictement positif et inérieur à la longueur du plateau divisée par deux
+    do {
+        printf("\n-> Veuillez saisir un nombre de pions strictement positif et inférieur à %d : ", n / 2);
+        scanf("%d", &p);
+    } while (p < 1 || p > (n / 2)-1);
+    //On demande au joueur de choisir le nombre de pions à aligner ( inférieur ou égal à p)
+    do {
+        printf("\n-> Veuillez saisir un nombre de pions à aligner strictement positif et inférieur ou égal à %d : ", p);
+        scanf("%d", &x);
+    } while (x < 1 || x > p);
 
     //Création du plateau de jeu
     struct Case plateau[n][n];
     CreatePlateau(n, plateau);
-    struct Pion pions[4][4];
+    struct Pion pions[2][p];
 
     //Création des joueurs
-    struct Joueur joueur1 = (struct Joueur){1,1,0,0,'X',12, 0,0,false};
-    struct Joueur joueur2 = (struct Joueur){2,2,0,0,'O',2,0,0,false};
+    struct Joueur joueur1 = (struct Joueur) {1, 1, 0, 0, 'X', 12, 0, 0, false};
+    struct Joueur joueur2 = (struct Joueur) {2, 2, 0, 0, 'O', 2, 0, 0, false};
     bool hasWin = false;
-    int winner= 0;
+    int winner = 0;
     //Placement des pions du joueur 1 et intelligence artificielle pour un placement automatique des pions du joueur 2
-    while (joueur2.nbPion <=3){
-            hasWin = placePion(n,&joueur1,plateau,pions);
-            if (hasWin == false){
-                hasWin = placePionIA(n,&joueur2,plateau,pions);
-                if (hasWin){
-                    winner = 2;
-                    break;
-                }
-            }else{
-                winner = 1;
+    while (joueur2.nbPion <= p - 1) {
+        hasWin = placePion2(n, p,  plateau, &joueur1,pions,x);
+        if (hasWin == false) {
+            hasWin = placePionIA2(n, p, &joueur2, plateau, pions, x);
+            if (hasWin) {
+                winner = 2;
                 break;
             }
+        } else {
+            winner = 1;
+            break;
         }
- //   Déplacement des pions du joueur 1 et intelligence artificielle pour un déplacement automatique des pions du joueur 2
+    }
     do {
         if (!hasWin){
-            hasWin = movePion(n,&joueur1,plateau,pions);
+            hasWin = movePion2(n,p,plateau,&joueur1,pions,x);
             if (hasWin == false){
-                hasWin = movePionIA(n,&joueur2,plateau,pions);
+                hasWin = movePionIA2(n,p,&joueur2,plateau,pions,x);
                 if (hasWin){
                     winner = 2;
                     break;
@@ -1010,17 +1181,13 @@ void IA(){
             break;
         }
     } while (hasWin == false);
+
     printf("\n");
     printf("---------------------");
     printf("\n");
     printf("-> Le joueur %d a gagné\n", winner);
     sleep(15);
-
-
-
 }
-
-
 
 
 void AffichageMenu(int choix){
@@ -1090,10 +1257,10 @@ void menu(){
     }while (!hasSelected);
     switch (choix){
         case 1:
-            IA();
+            IA2();
             break;
         case 2:
-            MultiJoueur();
+            MultiJoueur2();
             break;
         default:
             break;
@@ -1108,3 +1275,10 @@ int main()
     return 0;
 
 }
+
+
+
+
+
+
+
