@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <conio.h>
 #include <unistd.h>
+#include <time.h>
 
 void clearScreen()
 {
@@ -100,6 +101,138 @@ void affichagePlateau(int n,struct Case plateau[n][n],struct Joueur *joueur, int
     printf("\n[->] pour aller a droite");
     printf("\n[<-] pour aller a gauche");
 
+
+}
+
+//Fonction qui permet d'enregistrer la partie en cours (statut : mulitjoueur ou AI, taille du plateau, informations des joueurs : pions etc..)
+void saveGame(int n,int p, int x,struct Joueur joueur1, struct Joueur joueur2, struct Case plateau[n][n], struct Pion pions[2][p], int gameStatut){
+    FILE *fichier = NULL;
+    fichier = fopen("save.txt", "w");
+    //Enregistrement sous la forme :
+    // 1- Date et heure de la partie (format : jj/mm/aaaa hh:mm:ss)
+    // 2- Statut de la partie (multi ou AI)
+    // 3- Informations du plateau (longueur, nombre dce pions à aligner, positions des pions)
+    // 4.1 - Informations du joueur 1
+    // 4.2 - Informations du joueur 2
+
+    //1
+    time_t now = time(NULL);
+    struct tm tm = *localtime(&now);
+    fprintf(fichier, "Date et heure de la partie : %d/%d/%d %d:%d:%d \n", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    //2
+    if (gameStatut == 1){
+        fprintf(fichier, "Statut de la partie : Multi-joueur \n");
+    }else{
+        fprintf(fichier, "Statut de la partie : AI \n");
+    }
+    //3
+    fprintf(fichier, "Informations du plateau : \n");
+    fprintf(fichier, "Longueur du plateau : %d \n", n);
+    fprintf(fichier, "Nombre de pions à aligner : %d \n", x);
+    fprintf(fichier, "Positions des pions : \n");
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
+            if (plateau[i][j].isEmpty == false){
+                fprintf(fichier, "Pion %d, équipe %d - X: %d - Y: %d \n", plateau[i][j].pion->id, plateau[i][j].pion->equipe, plateau[i][j].posX, plateau[i][j].posY);
+            }else{
+                fprintf(fichier, "Case vide - X: %d - Y: %d \n", plateau[i][j].posX, plateau[i][j].posY);
+            }
+        }
+    }
+    //4.1
+    fprintf(fichier, "Informations du joueur 1 : \n");
+    fprintf(fichier, "Nombre de pions : %d \n", joueur1.nbPion);
+    //4.2
+    fprintf(fichier, "Informations du joueur 2 : \n");
+    fprintf(fichier, "Nombre de pions : %d \n", joueur2.nbPion);
+    fclose(fichier);
+
+
+
+}
+
+void choixSave(int choix){
+    switch (choix){
+        case 1:
+            printf("[");
+            textColor(4,0);
+            printf("%c",(char) 219);
+            textColor(15,0);
+            printf("] Continuer\n");
+            printf("[ ] Sauvegarder et quitter\n");
+            printf("[ ] Quitter sans sauvegarder\n");
+            break;
+        case 2:
+            printf("[ ] Continuer\n");
+            printf("[");
+            textColor(4,0);
+            printf("%c",(char) 219);
+            textColor(15,0);
+            printf("] Sauvegarder et quitter\n");
+            printf("[ ] Quitter sans sauvegarder\n");
+            break;
+        case 3:
+            printf("[ ] Continuer\n");
+            printf("[ ] Sauvegarder et quitter\n");
+            printf("[");
+            textColor(4,0);
+            printf("%c",(char) 219);
+            textColor(15,0);
+            printf("] Quitter sans sauvegarder\n");
+            break;
+        default:
+
+            break;
+
+    }
+}
+
+
+//Fonction shouldSave qui propose au joueur de sauvegarder la partie ou de continuer
+// Détection grâce aux flèches directionnelles et entrée
+void shouldSave(int n,int p, int x, struct Case plateau[n][n], struct Joueur *joueur1, struct Joueur *joueur2, struct Pion pions[2][p],int gameStatut){
+    int choix = 0;
+    printf("Voulez-vous sauvegarder la partie ?\n");
+    choixSave(choix);
+    bool hasSelected = false;
+    do{
+        if (GetAsyncKeyState(VK_UP) != 0){
+            choix = 1;
+            clearScreen();
+            printf("Voulez-vous sauvegarder la partie ?\n");
+            choixSave(choix);
+        }
+        if (GetAsyncKeyState(VK_DOWN) != 0){
+            choix = 2;
+            clearScreen();
+            printf("Voulez-vous sauvegarder la partie ?\n");
+            choixSave(choix);
+        }
+        if (GetAsyncKeyState(VK_RIGHT) != 0){
+            choix = 3;
+            clearScreen();
+            printf("Voulez-vous sauvegarder la partie ?\n");
+            choixSave(choix);
+        }
+        if (GetAsyncKeyState(VK_RETURN) != 0){
+            printf("-> Vous avez choisi l'option %d\n", choix);
+            sleep(1);
+            clearScreen();
+            hasSelected = true;
+        }
+    }while (!hasSelected);
+    switch (choix){
+        case 1:
+            break;
+        case 2:
+            saveGame(n,p,x,*joueur1,*joueur2,plateau,pions,gameStatut);
+            break;
+        case 3:
+            exit(0);
+            break;
+        default:
+            break;
+    }
 
 }
 
@@ -533,6 +666,8 @@ void MultiJoueur2(){
     Sleep(15);
 }
 
+
+
 void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurCase[n][n],int nbPionAligner) {
     int i, j;
     for (i = 0; i < n; i++) {
@@ -874,9 +1009,7 @@ bool placePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n],
         }
 
     }
-    printf("Test");
     AIeval2(n, plateau,*joueur, valeurCase, NbPionAligner);
-    printf("Test2");
 
     //On évalue les cases qui ont le plus de valeur et on pose un pion sur la case qui a la plus grande valeur (si la case est vide)
     int max = 0;
