@@ -213,32 +213,38 @@ void choixSave(int choix){
 // Détection grâce aux flèches directionnelles et entrée
 void shouldSave(int n,int p, int x, struct Case plateau[n][n], struct Joueur *joueur1, struct Joueur *joueur2, struct Pion pions[2][p],int gameStatut){
     int choix = 0;
-    printf("\n\n\n");
+    Sleep(1000);
+    clearScreen();
     printf("Voulez-vous sauvegarder la partie ?\n");
     choixSave(choix);
     bool hasSelected = false;
     do{
         if (GetAsyncKeyState(VK_UP) != 0){
             choix --;
-            if (choix > 3){
-                choix = 3;
-            }else if (choix < 0){
+            if (choix > 2){
                 choix = 0;
+            }else if (choix < 0){
+                choix = 2;
             }
             clearScreen();
             printf("Voulez-vous sauvegarder la partie ?\n");
             choixSave(choix);
+            Sleep(250);
+
         }
         if (GetAsyncKeyState(VK_DOWN) != 0){
             choix ++;
-            if (choix > 3){
-                choix = 3;
-            }else if (choix < 0){
+            if (choix > 2){
                 choix = 0;
+            }else if (choix < 0){
+                choix = 2;
             }
+
             clearScreen();
             printf("Voulez-vous sauvegarder la partie ?\n");
             choixSave(choix);
+            Sleep(250);
+
         }
         if (GetAsyncKeyState(VK_SPACE) != 0){
             printf("-> Vous avez choisi l'option %d\n", choix);
@@ -433,7 +439,10 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
                 joueur->posX = joueur->posX + 1;
                 clearScreen();
                 affichagePlateau(n,plateau,joueur,selecType);
+                Sleep(250);
+
                 pressedScore=0;
+
             }
         }
         //Détecte si la touche fleche du bas est pressée
@@ -443,6 +452,8 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
                 joueur->posX = joueur->posX - 1;
                 clearScreen();
                 affichagePlateau(n,plateau,joueur,selecType);
+                Sleep(250);
+
                 pressedScore=0;
             }
         }
@@ -453,6 +464,8 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
                 joueur->posY = joueur->posY - 1;
                 clearScreen();
                 affichagePlateau(n,plateau,joueur,selecType);
+                Sleep(250);
+
                 pressedScore=0;
             }
         }
@@ -463,6 +476,8 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
                 joueur->posY = joueur->posY + 1;
                 clearScreen();
                 affichagePlateau(n,plateau,joueur,selecType);
+                Sleep(250);
+
                 pressedScore=0;
             }
         }
@@ -502,7 +517,6 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
                         hasSelected = true;
                     }
                 }
-                Sleep(0.5);
                 pressedScore = 0;
             }
         }
@@ -1012,9 +1026,7 @@ bool placePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n],
     hasWin = scorePoint2(n,NbPionAligner,plateau,plateau[botPosY][botPosX],botPosX,botPosY);
     // On réinitialise les valeurs des cases
     for (i = 0; i < n; i++) {
-        printf("\n");
         for (j = 0; j < n; j++){
-            printf(" %d", valeurCase[i][j]);
             valeurCase[i][j] = 0;
         }
     }
@@ -1881,6 +1893,8 @@ void menu(){
             printf("-> Bienvenue dans le jeu du Teeko\n");
             printf("-> Veuillez choisir une option\n");
             AffichageMenu(choix);
+            Sleep(250);
+
 
         }
         if (GetAsyncKeyState(VK_DOWN) != 0){
@@ -1892,11 +1906,13 @@ void menu(){
             printf("-> Bienvenue dans le jeu du Teeko\n");
             printf("-> Veuillez choisir une option\n");
             AffichageMenu(choix);
+            Sleep(250);
+
 
         }
         if (GetAsyncKeyState(VK_RETURN) != 0){
             printf("-> Vous avez choisi l'option %d\n", choix);
-            sleep(1);
+            Sleep(250);
             clearScreen();
             hasSelected = true;
         }
