@@ -59,7 +59,7 @@ void affichagePlateau(int n,struct Case plateau[n][n],struct Joueur *joueur, int
         for (j=1;j<n+1;j++){
 
             if (plateau[i-1][j-1].isEmpty == true){
-                //permet de mettre en couleur la case que le joueur est entrain de parcourir jusqu'au moment où il la sélectionne
+                //permet de mettre en couleur la case que le joueur est entrain de parcourir jusqu'au moment où il la selectionne
                 if (i-1 == playerPosY && j-1 == playerPosX){
                     textColor(joueur->color,0);
                 }
@@ -103,14 +103,14 @@ void affichagePlateau(int n,struct Case plateau[n][n],struct Joueur *joueur, int
 
 }
 
-//Fonction qui permet d'enregistrer la partie en cours en gardant les informations déjà contenues dans le fichier (statut : mulitjoueur ou AI, taille du plateau, informations des joueurs : pions etc..)
+//Fonction qui permet d'enregistrer la partie en cours en gardant les informations deja contenues dans le fichier (statut : mulitjoueur ou AI, taille du plateau, informations des joueurs : pions etc..)
 void saveGame(int n,int p, int x,struct Joueur joueur1, struct Joueur joueur2, struct Case plateau[n][n], struct Pion pions[2][p], int gameStatut){
     FILE *fichier = fopen("save.txt", "w");
 
     //Enregistrement sous la forme :
     // 1- Date et heure de la partie (format : jj/mm/aaaa hh:mm:ss)
     // 2- Statut de la partie (multi ou AI)
-    // 3- Informations du plateau (longueur, nombre dce pions à aligner, positions des pions)
+    // 3- Informations du plateau (longueur, nombre dce pions a aligner, positions des pions)
     // 4.1 - Informations du joueur 1
     // 4.2 - Informations du joueur 2
     if (fichier != NULL){
@@ -130,7 +130,7 @@ void saveGame(int n,int p, int x,struct Joueur joueur1, struct Joueur joueur2, s
         fprintf(fichier, "Informations du plateau : \n");
         fprintf(fichier, "Longueur du plateau : %d \n", n);
         fprintf(fichier, "Nombre de pions par joueur : %d \n", p);
-        fprintf(fichier, "Nombre de pions à aligner : %d \n", x);
+        fprintf(fichier, "Nombre de pions a aligner : %d \n", x);
 
         fprintf(fichier, "Positions des pions : \n");
 
@@ -210,7 +210,7 @@ void choixSave(int choix){
 
 
 //Fonction shouldSave qui propose au joueur de sauvegarder la partie ou de continuer
-// Détection grâce aux flèches directionnelles et entrée
+// Detection grâce aux fleches directionnelles et entree
 void shouldSave(int n,int p, int x, struct Case plateau[n][n], struct Joueur *joueur1, struct Joueur *joueur2, struct Pion pions[2][p],int gameStatut){
     int choix = 0;
     Sleep(1000);
@@ -277,7 +277,7 @@ bool scorePoint2(int n,int x ,struct Case plateau[n][n],struct Case actualCase,i
     int compteur = 0;
     int defPosX = posX;
     int defPosY = posY;
-    //Vérifie vers le Nord si il y a un pion de la même équipe et incrémente le compteur tant qu'il y'en a un, puis retourne à la position de base pour vérifier vers le Sud si il y a un pion de la même équipe et incrémente le compteur tant qu'il y'en a un
+    //Verifie vers le Nord si il y a un pion de la même equipe et incremente le compteur tant qu'il y'en a un, puis retourne a la position de base pour verifier vers le Sud si il y a un pion de la même equipe et incremente le compteur tant qu'il y'en a un
     // Verification vers le Nord
     while (actualCase.voisinN != 0 && plateau[posY-1][posX].pion != NULL && plateau[posY-1][posX].pion->equipe->equipe == equipe){
         compteur++;
@@ -300,7 +300,7 @@ bool scorePoint2(int n,int x ,struct Case plateau[n][n],struct Case actualCase,i
     compteur = 0;
     posY = defPosY;
     actualCase = plateau[posY][posX];
-    //Vérifie vers l'Est si il y a un pion de la même équipe et incrémente le compteur tant qu'il y'en a un, puis retourne à la position de base pour vérifier vers l'Ouest si il y a un pion de la même équipe et incrémente le compteur tant qu'il y'en a un
+    //Verifie vers l'Est si il y a un pion de la même equipe et incremente le compteur tant qu'il y'en a un, puis retourne a la position de base pour verifier vers l'Ouest si il y a un pion de la même equipe et incremente le compteur tant qu'il y'en a un
     // Verification vers l'Est
     while (actualCase.voisinE != 0 && plateau[posY][posX+1].pion != NULL && plateau[posY][posX+1].pion->equipe->equipe == equipe){
         compteur++;
@@ -321,7 +321,7 @@ bool scorePoint2(int n,int x ,struct Case plateau[n][n],struct Case actualCase,i
     compteur = 0;
     posX = defPosX;
     actualCase = plateau[posY][posX];
-    //Vérifie vers le Nord-Est si il y a un pion de la même équipe et incrémente le compteur tant qu'il y'en a un, puis retourne à la position de base pour vérifier vers le Sud-Ouest si il y a un pion de la même équipe et incrémente le compteur tant qu'il y'en a un
+    //Verifie vers le Nord-Est si il y a un pion de la même equipe et incremente le compteur tant qu'il y'en a un, puis retourne a la position de base pour verifier vers le Sud-Ouest si il y a un pion de la même equipe et incremente le compteur tant qu'il y'en a un
     // Verification vers le Nord-Est
     while (actualCase.voisinNE != 0 && plateau[posY-1][posX+1].pion != NULL && plateau[posY-1][posX+1].pion->equipe->equipe == equipe){
         compteur++;
@@ -346,7 +346,7 @@ bool scorePoint2(int n,int x ,struct Case plateau[n][n],struct Case actualCase,i
     posY = defPosY;
     posX = defPosX;
     actualCase = plateau[posY][posX];
-    //Vérifie vers le Nord-Ouest si il y a un pion de la même équipe et incrémente le compteur tant qu'il y'en a un, puis retourne à la position de base pour vérifier vers le Sud-Est si il y a un pion de la même équipe et incrémente le compteur tant qu'il y'en a un
+    //Verifie vers le Nord-Ouest si il y a un pion de la même equipe et incremente le compteur tant qu'il y'en a un, puis retourne a la position de base pour verifier vers le Sud-Est si il y a un pion de la même equipe et incremente le compteur tant qu'il y'en a un
     // Verification vers le Nord-Ouest
     while (actualCase.voisinNO != 0 && plateau[posY-1][posX-1].pion != NULL && plateau[posY-1][posX-1].pion->equipe->equipe == equipe){
         compteur++;
@@ -367,13 +367,13 @@ bool scorePoint2(int n,int x ,struct Case plateau[n][n],struct Case actualCase,i
     if (compteur >= x-1){
         return true;
     }
-    // Vérification de pions positionnés en carrés
+    // Verification de pions positionnes en carres
     compteur = 0;
     posY = defPosY;
     posX = defPosX;
     actualCase = plateau[posY][posX];
-    // Carré #1 :
-    //Un pion à droite du pion actuel et un pion au dessus du pion actuel et de celui de droite
+    // Carre #1 :
+    //Un pion a droite du pion actuel et un pion au dessus du pion actuel et de celui de droite
     if (actualCase.voisinE != 0 && actualCase.voisinN != 0 && actualCase.voisinNE != 0 && plateau[posY-1][posX+1].pion != NULL && plateau[posY-1][posX+1].pion->equipe->equipe == equipe && plateau[posY][posX+1].pion != NULL && plateau[posY][posX+1].pion->equipe->equipe == equipe && plateau[posY-1][posX].pion != NULL && plateau[posY-1][posX].pion->equipe->equipe == equipe){
         compteur++;
     }
@@ -384,8 +384,8 @@ bool scorePoint2(int n,int x ,struct Case plateau[n][n],struct Case actualCase,i
     posY = defPosY;
     posX = defPosX;
     actualCase = plateau[posY][posX];
-    // Carré #2 :
-    //Un pion à gauche du pion actuel et un pion au dessus du pion actuel et de celui de gauche
+    // Carre #2 :
+    //Un pion a gauche du pion actuel et un pion au dessus du pion actuel et de celui de gauche
     if (actualCase.voisinO != 0 && actualCase.voisinN != 0 && actualCase.voisinNO != 0 && plateau[posY-1][posX-1].pion != NULL && plateau[posY-1][posX-1].pion->equipe->equipe == equipe && plateau[posY][posX-1].pion != NULL && plateau[posY][posX-1].pion->equipe->equipe == equipe && plateau[posY-1][posX].pion != NULL && plateau[posY-1][posX].pion->equipe->equipe == equipe){
         compteur++;
     }
@@ -396,8 +396,8 @@ bool scorePoint2(int n,int x ,struct Case plateau[n][n],struct Case actualCase,i
     posY = defPosY;
     posX = defPosX;
     actualCase = plateau[posY][posX];
-    // Carré #3 :
-    //Un pion à droite du pion actuel et un pion en dessous du pion actuel et de celui de droite
+    // Carre #3 :
+    //Un pion a droite du pion actuel et un pion en dessous du pion actuel et de celui de droite
     if (actualCase.voisinE != 0 && actualCase.voisinS != 0 && actualCase.voisinSE != 0 && plateau[posY+1][posX+1].pion != NULL && plateau[posY+1][posX+1].pion->equipe->equipe == equipe && plateau[posY][posX+1].pion != NULL && plateau[posY][posX+1].pion->equipe->equipe == equipe && plateau[posY+1][posX].pion != NULL && plateau[posY+1][posX].pion->equipe->equipe == equipe){
         compteur++;
     }
@@ -408,8 +408,8 @@ bool scorePoint2(int n,int x ,struct Case plateau[n][n],struct Case actualCase,i
     posY = defPosY;
     posX = defPosX;
     actualCase = plateau[posY][posX];
-    // Carré #4 :
-    //Un pion à gauche du pion actuel et un pion en dessous du pion actuel et de celui de gauche
+    // Carre #4 :
+    //Un pion a gauche du pion actuel et un pion en dessous du pion actuel et de celui de gauche
     if (actualCase.voisinO != 0 && actualCase.voisinS != 0 && actualCase.voisinSO != 0 && plateau[posY+1][posX-1].pion != NULL && plateau[posY+1][posX-1].pion->equipe->equipe == equipe && plateau[posY][posX-1].pion != NULL && plateau[posY][posX-1].pion->equipe->equipe == equipe && plateau[posY+1][posX].pion != NULL && plateau[posY+1][posX].pion->equipe->equipe == equipe){
         compteur++;
     }
@@ -430,9 +430,9 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
     bool hasSelected = false;
     bool hasWin = false;
     int pressedScore = 0;
-    //Boucle qui permet de naviguer sur les cases grâce à une détection automatique des fleches directionnelles, puis en actualisant l'affichage du plateau et de sélectionner une case avec la touche entrée
+    //Boucle qui permet de naviguer sur les cases grâce a une detection automatique des fleches directionnelles, puis en actualisant l'affichage du plateau et de selectionner une case avec la touche entree
     while (!hasSelected) {
-        //Détecte si la touche fleche du haut est pressée
+        //Detecte si la touche fleche du haut est pressee
         if (GetAsyncKeyState(VK_RIGHT) && plateau[joueur->posY][joueur->posX].voisinE != 0){
             pressedScore ++;
             if (pressedScore ==1){
@@ -445,7 +445,7 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
 
             }
         }
-        //Détecte si la touche fleche du bas est pressée
+        //Detecte si la touche fleche du bas est pressee
         if (GetAsyncKeyState(VK_LEFT) && plateau[joueur->posY][joueur->posX].voisinO != 0){
             pressedScore ++;
             if (pressedScore ==1){
@@ -457,7 +457,7 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
                 pressedScore=0;
             }
         }
-        //Détecte si la touche fleche du haut est pressée
+        //Detecte si la touche fleche du haut est pressee
         if (GetAsyncKeyState(VK_UP) && plateau[joueur->posY][joueur->posX].voisinN != 0){
             pressedScore ++;
             if (pressedScore ==1){
@@ -469,7 +469,7 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
                 pressedScore=0;
             }
         }
-        //Détecte si la touche fleche du bas est pressée
+        //Detecte si la touche fleche du bas est pressee
         if (GetAsyncKeyState(VK_DOWN) && plateau[joueur->posY][joueur->posX].voisinS != 0){
             pressedScore ++;
             if (pressedScore ==1){
@@ -481,7 +481,7 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
                 pressedScore=0;
             }
         }
-        //Détecte si la touche entrée est pressée
+        //Detecte si la touche entree est pressee
         if (GetAsyncKeyState(VK_TAB)){
             pressedScore = pressedScore +1;
             if (pressedScore >= 1) {
@@ -504,7 +504,7 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
                         hasSelected = true;
                     }
                 }else{
-                    //Change la position du pion de la coordonnée (Y,X) à la coordonnée (joueur->posY,joueur->posX)
+                    //Change la position du pion de la coordonnee (Y,X) a la coordonnee (joueur->posY,joueur->posX)
                     if (plateau[joueur->posY][joueur->posX].isEmpty == true) {
                         plateau[joueur->posY][joueur->posX].pion = plateau[*posY][*posX].pion;
                         plateau[joueur->posY][joueur->posX].isEmpty = false;
@@ -534,7 +534,7 @@ bool placePion2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,str
     CaseSelector2(n,p, plateau, joueur, pions,&posX, &posY,0);
     hasWin = scorePoint2(n,x,plateau,plateau[posY][posX],posX,posY);
     {if (hasWin == true) {
-            printf("\nLe joueur %d a gagné", joueur->equipe);
+            printf("\nLe joueur %d a gagne", joueur->equipe);
         }
         return hasWin;
     }
@@ -547,17 +547,17 @@ bool movePion2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,stru
     printf("\n");
     printf("---------------------");
     printf("\n");
-    printf("-> Joueur %d, déplacez votre pion\n", joueur->equipe);
+    printf("-> Joueur %d, deplacez votre pion\n", joueur->equipe);
     CaseSelector2(n,p, plateau, joueur, pions,&posX, &posY,1);
     affichagePlateau(n, plateau,joueur,2);
     printf("\n");
     printf("---------------------");
     printf("\n");
-    printf("-> Joueur %d, déplacez votre pion\n", joueur->equipe);
+    printf("-> Joueur %d, deplacez votre pion\n", joueur->equipe);
     CaseSelector2(n,p, plateau, joueur, pions,&posX, &posY,2);
     hasWin = scorePoint2(n,x,plateau,plateau[posY][posX],posX,posY);
     {if (hasWin == true) {
-            printf("\nLe joueur %d a gagné", joueur->equipe);
+            printf("\nLe joueur %d a gagne", joueur->equipe);
         }
         return hasWin;
     }
@@ -572,63 +572,63 @@ bool movePion2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,stru
 
 
 
-//Fonction "CreatePlateau" qui automatise la création du plateau de jeu
+//Fonction "CreatePlateau" qui automatise la creation du plateau de jeu
 void CreatePlateau(int n, struct Case plateau[n][n]){
     int i,j;
     for (i=1;i<(n+1);i++){
         printf("\n");
         for (j=1;j<n+1;j++){
             plateau[i-1][j-1] = (struct Case){i*(n)+j-n,j,i,0,0,0,0,0,0,0,0,true,NULL};
-            //Voisin nord = à 0 si on est sur la première ligne
+            //Voisin nord = a 0 si on est sur la premiere ligne
             if (i == 1){
                 plateau[i-1][j-1].voisinN = 0;
             }
             else{
                 plateau[i-1][j-1].voisinN = plateau[i-1][j-1].id -n;
             }
-            //Voisin sud = à 0 si on est sur la dernière ligne
+            //Voisin sud = a 0 si on est sur la derniere ligne
             if (i == n){
                 plateau[i-1][j-1].voisinS = 0;
             }
             else{
                 plateau[i-1][j-1].voisinS = plateau[i-1][j-1].id +n;
             }
-            //Voisin est = à 0 si on est sur la dernière colonne
+            //Voisin est = a 0 si on est sur la derniere colonne
             if (j == n){
                 plateau[i-1][j-1].voisinE = 0;
             }
             else{
                 plateau[i-1][j-1].voisinE = plateau[i-1][j-1].id +1;
             }
-            //Voisin ouest = à 0 si on est sur la première colonne
+            //Voisin ouest = a 0 si on est sur la premiere colonne
             if (j == 1){
                 plateau[i-1][j-1].voisinO = 0;
             }
             else{
                 plateau[i-1][j-1].voisinO = plateau[i-1][j-1].id -1;
             }
-            //Voisin nord-est = à 0 si on est sur la première ligne ou la dernière colonne
+            //Voisin nord-est = a 0 si on est sur la premiere ligne ou la derniere colonne
             if (i == 1 || j == n){
                 plateau[i-1][j-1].voisinNE = 0;
             }
             else{
                 plateau[i-1][j-1].voisinNE = plateau[i-1][j-1].id -n +1;
             }
-            //Voisin nord-ouest = à 0 si on est sur la première ligne ou la première colonne
+            //Voisin nord-ouest = a 0 si on est sur la premiere ligne ou la premiere colonne
             if (i == 1 || j == 1){
                 plateau[i-1][j-1].voisinNO = 0;
             }
             else{
                 plateau[i-1][j-1].voisinNO = plateau[i-1][j-1].id -n -1;
             }
-            //Voisin sud-est = à 0 si on est sur la dernière ligne ou la dernière colonne
+            //Voisin sud-est = a 0 si on est sur la derniere ligne ou la derniere colonne
             if (i == n || j == n){
                 plateau[i-1][j-1].voisinSE = 0;
             }
             else{
                 plateau[i-1][j-1].voisinSE = plateau[i-1][j-1].id +n +1;
             }
-            //Voisin sud-ouest = à 0 si on est sur la dernière ligne ou la première colonne
+            //Voisin sud-ouest = a 0 si on est sur la derniere ligne ou la premiere colonne
             if (i == n || j == 1){
                 plateau[i-1][j-1].voisinSO = 0;
             }
@@ -651,9 +651,9 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
     int i, j;
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
-            //Check si la case est occupée par un pion du joueur 1
+            //Check si la case est occupee par un pion du joueur 1
             if (plateau[i][j].isEmpty == false && plateau[i][j].pion->equipe->equipe == 1) {
-                //Les cases qui l'entourent prennent la valeur 1 sauf si elles sont déjà occupées par un pion du joueur 1 ou du robot
+                //Les cases qui l'entourent prennent la valeur 1 sauf si elles sont deja occupees par un pion du joueur 1 ou du robot
                 if (plateau[i][j].voisinN != 0 && plateau[i - 1][j].isEmpty == true) {
                     valeurCase[i - 1][j]++;
                 }
@@ -678,7 +678,7 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                 if (plateau[i][j].voisinSO != 0 && plateau[i + 1][j - 1].isEmpty == true) {
                     valeurCase[i + 1][j - 1]++;
                 }
-                //On check si le joueur 1 est entrain de former une diaonale avec deux pions, et si c'est le cas on incrémente la valeur des cases aux extrémités de la diagonale si elles sont libres
+                //On check si le joueur 1 est entrain de former une diaonale avec deux pions, et si c'est le cas on incremente la valeur des cases aux extremites de la diagonale si elles sont libres
                 //Diagonale Nord-Est :
                 if (plateau[i][j].voisinNE != 0 && plateau[i - 1][j + 1].isEmpty == false &&
                     plateau[i - 1][j + 1].pion->equipe->equipe == 1) {
@@ -720,57 +720,57 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                         valeurCase[i - 1][j + 1]++;
                     }
                 }
-                //On check si le joueur 1 a formé une ligne verticale avec nbPionAligner-1 pions et si c'est le cas, on incrémente de 1000 la valeur de la case qu'il manque pour compléter la ligne de nbPionAligner pions, si elle est libre
+                //On check si le joueur 1 a forme une ligne verticale avec nbPionAligner-1 pions et si c'est le cas, on incremente de 1000 la valeur de la case qu'il manque pour completer la ligne de nbPionAligner pions, si elle est libre
                 //Vers le Nord :
-                // On va vers le haut tant qu'il y a un voisin Nord différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                // On va vers le haut tant qu'il y a un voisin Nord different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 1 est dessus, et on incremente un compteur
                 int compteur = 0;
                 int k = i;
                 while (plateau[k][j].voisinN != 0 && plateau[k][j].isEmpty == false && plateau[k][j].pion->equipe->equipe == 1) {
                     compteur++;
                     k--;
                 }
-                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-2, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 2 && plateau[k][j].isEmpty == true) {
                     valeurCase[k][j] += 1000;
                 }
                 //Vers le Sud :
-                // On va vers le bas tant qu'il y a un voisin Sud différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                // On va vers le bas tant qu'il y a un voisin Sud different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 1 est dessus, et on incremente un compteur
                 compteur = 0;
                 k = i;
                 while (plateau[k][j].voisinS != 0 && plateau[k][j].isEmpty == false && plateau[k][j].pion->equipe->equipe == 1) {
                     compteur++;
                     k++;
                 }
-                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-2, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 2 && plateau[k][j].isEmpty == true) {
                     valeurCase[k][j] += 1000;
                 }
                 //Vers l'Est :
-                // On va vers la droite tant qu'il y a un voisin Est différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                // On va vers la droite tant qu'il y a un voisin Est different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 1 est dessus, et on incremente un compteur
                 compteur = 0;
                 k = j;
                 while (plateau[i][k].voisinE != 0 && plateau[i][k].isEmpty == false && plateau[i][k].pion->equipe->equipe == 1) {
                     compteur++;
                     k++;
                 }
-                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-2, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 2 && plateau[i][k].isEmpty == true) {
                     valeurCase[i][k] += 1000;
                 }
                 //Vers l'Ouest :
-                // On va vers la gauche tant qu'il y a un voisin Ouest différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                // On va vers la gauche tant qu'il y a un voisin Ouest different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 1 est dessus, et on incremente un compteur
                 compteur = 0;
                 k = j;
                 while (plateau[i][k].voisinO != 0 && plateau[i][k].isEmpty == false && plateau[i][k].pion->equipe->equipe == 1) {
                     compteur++;
                     k--;
                 }
-                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-2, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 2 && plateau[i][k].isEmpty == true) {
                     valeurCase[i][k] += 1000;
                 }
                 //Diagonale Nord-Ouest :
-                // On va vers la gauche et vers le haut tant qu'il y a un voisin Nord-Ouest différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                // On va vers la gauche et vers le haut tant qu'il y a un voisin Nord-Ouest different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 1 est dessus, et on incremente un compteur
                 compteur = 0;
                 k = i;
                 int l = j;
@@ -779,12 +779,12 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                     k--;
                     l--;
                 }
-                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-2, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 2 && plateau[k][l].isEmpty == true) {
                     valeurCase[k][l] += 1000;
                 }
                 //Diagonale Nord-Est :
-                // On va vers la droite et vers le haut tant qu'il y a un voisin Nord-Est différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                // On va vers la droite et vers le haut tant qu'il y a un voisin Nord-Est different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 1 est dessus, et on incremente un compteur
                 compteur = 0;
                 k = i;
                 l = j;
@@ -793,12 +793,12 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                     k--;
                     l++;
                 }
-                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-2, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 2 && plateau[k][l].isEmpty == true) {
                     valeurCase[k][l] += 1000;
                 }
                 //Diagonale Sud-Ouest :
-                // On va vers la gauche et vers le bas tant qu'il y a un voisin Sud-Ouest différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                // On va vers la gauche et vers le bas tant qu'il y a un voisin Sud-Ouest different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 1 est dessus, et on incremente un compteur
                 compteur = 0;
                 k = i;
                 l = j;
@@ -807,12 +807,12 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                     k++;
                     l--;
                 }
-                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-2, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 2 && plateau[k][l].isEmpty == true) {
                     valeurCase[k][l] += 1000;
                 }
                 //Diagonale Sud-Est :
-                // On va vers la droite et vers le bas tant qu'il y a un voisin Sud-Est différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 1 est dessus, et on incrémente un compteur
+                // On va vers la droite et vers le bas tant qu'il y a un voisin Sud-Est different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 1 est dessus, et on incremente un compteur
                 compteur = 0;
                 k = i;
                 l = j;
@@ -821,14 +821,14 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                     k++;
                     l++;
                 }
-                //Si le compteur est égal à nbPionAligner-2, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-2, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 2 && plateau[k][l].isEmpty == true) {
                     valeurCase[k][l] += 1000;
                 }
             }
-            //On check les cases qui sont occupées par un pion du robot
+            //On check les cases qui sont occupees par un pion du robot
             if (plateau[i][j].isEmpty == false && plateau[i][j].pion->equipe->equipe == 2) {
-                //Les cases qui l'entourent prennent la valeur 1 sauf si elles sont déjà occupées par un pion du joueur 1 ou du robot
+                //Les cases qui l'entourent prennent la valeur 1 sauf si elles sont deja occupees par un pion du joueur 1 ou du robot
                 if (plateau[i][j].voisinN != 0 && plateau[i - 1][j].isEmpty == true) {
                     valeurCase[i - 1][j]++;
                 }
@@ -853,9 +853,9 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                 if (plateau[i][j].voisinSO != 0 && plateau[i + 1][j - 1].isEmpty == true) {
                     valeurCase[i + 1][j - 1]++;
                 }
-                //On check si le joueur 2 (robot) a déjà formé une ligne verticale de nbPionAligner -1 pions, si c'est le cas, on incrémente de 10000 la valeur de la case qu'il manque pour compléter la ligne de nbPionAligner pions si elles sont libres
+                //On check si le joueur 2 (robot) a deja forme une ligne verticale de nbPionAligner -1 pions, si c'est le cas, on incremente de 10000 la valeur de la case qu'il manque pour completer la ligne de nbPionAligner pions si elles sont libres
                 //Ligne Nord :
-                // On va vers le haut tant qu'il y a un voisin Nord différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                // On va vers le haut tant qu'il y a un voisin Nord different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 2 est dessus, et on incremente un compteur
                 int compteur = 0;
                 int k = i;
                 int l = j;
@@ -863,12 +863,12 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                     compteur++;
                     k--;
                 }
-                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-1, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
                     valeurCase[k][l] += 10000;
                 }
                 //Ligne Sud :
-                // On va vers le bas tant qu'il y a un voisin Sud différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                // On va vers le bas tant qu'il y a un voisin Sud different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 2 est dessus, et on incremente un compteur
                 compteur = 0;
                 k = i;
                 l = j;
@@ -876,12 +876,12 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                     compteur++;
                     k++;
                 }
-                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-1, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
                     valeurCase[k][l] += 10000;
                 }
                 //Ligne Est :
-                // On va vers la droite tant qu'il y a un voisin Est différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                // On va vers la droite tant qu'il y a un voisin Est different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 2 est dessus, et on incremente un compteur
                 compteur = 0;
                 k = i;
                 l = j;
@@ -889,12 +889,12 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                     compteur++;
                     l++;
                 }
-                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-1, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
                     valeurCase[k][l] += 10000;
                 }
                 //Ligne Ouest :
-                // On va vers la gauche tant qu'il y a un voisin Ouest différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                // On va vers la gauche tant qu'il y a un voisin Ouest different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 2 est dessus, et on incremente un compteur
                 compteur = 0;
                 k = i;
                 l = j;
@@ -902,12 +902,12 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                     compteur++;
                     l--;
                 }
-                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-1, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
                     valeurCase[k][l] += 10000;
                 }
                 //Ligne Nord-Est :
-                // On va vers le haut et la droite tant qu'il y a un voisin Nord-Est différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                // On va vers le haut et la droite tant qu'il y a un voisin Nord-Est different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 2 est dessus, et on incremente un compteur
                 compteur = 0;
                 k = i;
                 l = j;
@@ -916,12 +916,12 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                     k--;
                     l++;
                 }
-                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-1, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
                     valeurCase[k][l] += 10000;
                 }
                 //Ligne Nord-Ouest :
-                // On va vers le haut et la gauche tant qu'il y a un voisin Nord-Ouest différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                // On va vers le haut et la gauche tant qu'il y a un voisin Nord-Ouest different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 2 est dessus, et on incremente un compteur
                 compteur = 0;
                 k = i;
                 l = j;
@@ -930,12 +930,12 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                     k--;
                     l--;
                 }
-                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-1, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
                     valeurCase[k][l] += 10000;
                 }
                 //Ligne Sud-Est :
-                // On va vers le bas et la droite tant qu'il y a un voisin Sud-Est différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                // On va vers le bas et la droite tant qu'il y a un voisin Sud-Est different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 2 est dessus, et on incremente un compteur
                 compteur = 0;
                 k = i;
                 l = j;
@@ -944,12 +944,12 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                     k++;
                     l++;
                 }
-                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-1, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
                     valeurCase[k][l] += 10000;
                 }
                 //Ligne Sud-Ouest :
-                // On va vers le bas et la gauche tant qu'il y a un voisin Sud-Ouest différent de 0 et que la case n'est pas vide, et qu'un pion de l'équipe 2 est dessus, et on incrémente un compteur
+                // On va vers le bas et la gauche tant qu'il y a un voisin Sud-Ouest different de 0 et que la case n'est pas vide, et qu'un pion de l'equipe 2 est dessus, et on incremente un compteur
                 compteur = 0;
                 k = i;
                 l = j;
@@ -958,7 +958,7 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
                     k++;
                     l--;
                 }
-                //Si le compteur est égal à nbPionAligner-1, on incrémente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
+                //Si le compteur est egal a nbPionAligner-1, on incremente la valeur de la case au dessus de la ligne de nbPionAligner pions si elle est libre
                 if (compteur == nbPionAligner - 1 && plateau[k][l].isEmpty == true) {
                     valeurCase[k][l] += 10000;
                 }
@@ -972,15 +972,15 @@ void AIeval2(int n, struct Case plateau[n][n], struct Joueur joueur, int valeurC
     }
 }
 
-//Fonction "placePionIA", qui permet de placer les pions de l'IA de manière intelligente afin de bloquer le joueur 1 (détection du placement des pions du joueur 1 et prise de décision) et de gagner le plus rapidement possible (détection des pions du robot et prise de décision)
-//Dans un premier temps, l'intelligence artificelle analyse le placement des pions du joueur 1, et attribue une valeur à chaque case du plateau de jeu en fonction de la position des pions du joueur 1, (+ il peut bloquer le joueur 1 dans sa progression, + la valeur de la case est élevée)
-// Dans un second temps, l'intelligence artificielle analyse la position des pions du joueur 2 (robot), et attribue une valeur à chaque case du plateau de jeu en fonction de la position des pions du joueur 2 (+ le robot peut se rapprocher de la victoire, + la valeur de la case est élevée)
-// Enfin, l'intelligence artificielle compare les valeurs des cases du plateau de jeu, et place le pion de l'IA sur la case qui a la valeur la plus élevée
+//Fonction "placePionIA", qui permet de placer les pions de l'IA de maniere intelligente afin de bloquer le joueur 1 (detection du placement des pions du joueur 1 et prise de decision) et de gagner le plus rapidement possible (detection des pions du robot et prise de decision)
+//Dans un premier temps, l'intelligence artificelle analyse le placement des pions du joueur 1, et attribue une valeur a chaque case du plateau de jeu en fonction de la position des pions du joueur 1, (+ il peut bloquer le joueur 1 dans sa progression, + la valeur de la case est elevee)
+// Dans un second temps, l'intelligence artificielle analyse la position des pions du joueur 2 (robot), et attribue une valeur a chaque case du plateau de jeu en fonction de la position des pions du joueur 2 (+ le robot peut se rapprocher de la victoire, + la valeur de la case est elevee)
+// Enfin, l'intelligence artificielle compare les valeurs des cases du plateau de jeu, et place le pion de l'IA sur la case qui a la valeur la plus elevee
 bool placePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n], struct Pion pions[2][p], int NbPionAligner) {
 
     int i, j;
     int valeurCase[n][n];
-    //Initialisation du tableau de valeurs à 0
+    //Initialisation du tableau de valeurs a 0
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
             valeurCase[i][j] = 0;
@@ -990,7 +990,7 @@ bool placePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n],
     }
     AIeval2(n, plateau,*joueur, valeurCase, NbPionAligner);
 
-    //On évalue les cases qui ont le plus de valeur et on pose un pion sur la case qui a la plus grande valeur (si la case est vide)
+    //On evalue les cases qui ont le plus de valeur et on pose un pion sur la case qui a la plus grande valeur (si la case est vide)
     int max = 0;
     int botPosX = 0;
     int botPosY = 0;
@@ -1021,10 +1021,10 @@ bool placePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n],
         joueur->nbPion++;
     }
 
-    //On check si le BOT a gagné grâce à la fonction scorePoint
+    //On check si le BOT a gagne grâce a la fonction scorePoint
     bool hasWin = false;
     hasWin = scorePoint2(n,NbPionAligner,plateau,plateau[botPosY][botPosX],botPosX,botPosY);
-    // On réinitialise les valeurs des cases
+    // On reinitialise les valeurs des cases
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++){
             valeurCase[i][j] = 0;
@@ -1037,13 +1037,13 @@ bool placePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n],
 
 }
 
-//Fonction "movePionIA" qui permet de déplacer un pion du joueur 2 (intelligence artificielle) de manière à bloquer le joueur 1 si il est sur le point de gagner ou de déplacer un pion du robot si il est sur le point de gagner
-//De même que pour la fonction "placePionIA", on va évaluer les cases du plateau de jeu et on va déplacer le pion sur la case qui a la plus grande valeur
-//Ici, on procède à une double évaluation, car il faut aussi évaluer le meilleur pion à déplacer.  Pour cela on analyse si il ne s'agit pas d'une case qui permet déjà de bloquer le joueur 1 ou de gagner le jeu pour le joueur 2
+//Fonction "movePionIA" qui permet de deplacer un pion du joueur 2 (intelligence artificielle) de maniere a bloquer le joueur 1 si il est sur le point de gagner ou de deplacer un pion du robot si il est sur le point de gagner
+//De même que pour la fonction "placePionIA", on va evaluer les cases du plateau de jeu et on va deplacer le pion sur la case qui a la plus grande valeur
+//Ici, on procede a une double evaluation, car il faut aussi evaluer le meilleur pion a deplacer.  Pour cela on analyse si il ne s'agit pas d'une case qui permet deja de bloquer le joueur 1 ou de gagner le jeu pour le joueur 2
 
 
 bool movePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n], struct Pion pions[2][p], int x) {
-    //D'abord on évalue le pion à déplacer
+    //D'abord on evalue le pion a deplacer
     int i, j, k, l;
     int valeurCase[n][n];
     int valeurPion[4];
@@ -1053,23 +1053,23 @@ bool movePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n], 
     int botPosY = 0;
 
 
-    //On initialise les valeurs des cases à 0
+    //On initialise les valeurs des cases a 0
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
             valeurCase[i][j] = 0;
         }
     }
-    //On initialise les valeurs des pions à 0
+    //On initialise les valeurs des pions a 0
     for (i = 0; i < 4; i++) {
         valeurPion[i] = 0;
     }
 
-    //Si le pion permet de bloquer le joueur 1, alors il prend une valeur négative égale à -1000
+    //Si le pion permet de bloquer le joueur 1, alors il prend une valeur negative egale a -1000
     //On part de la position du pion et on analyse les cases autour du pion
     for (i = 0; i < 4; i++) {
         int botPosX = pions[1][i].pos->posX -1;
         int botPosY = pions[1][i].pos->posY -1;
-        //Si le pion est entre deux pions du joueur 1, alors on lui attribue une valeur négative égale à -1
+        //Si le pion est entre deux pions du joueur 1, alors on lui attribue une valeur negative egale a -1
         if (botPosX > 0 && botPosX < n - 1) {
             if (plateau[botPosY][botPosX - 1].isEmpty == false && plateau[botPosY][botPosX + 1].isEmpty == false &&  plateau[botPosY][botPosX - 1].pion->equipe->equipe == 1 && plateau[botPosY][botPosX + 1].pion->equipe->equipe == 1) {
                 valeurPion[i] --;
@@ -1080,7 +1080,7 @@ bool movePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n], 
                 valeurPion[i] --;
             }
         }
-        // Si le pion a comme voisin de droite une ligne horizontale de x-1 pions du joueur 1, alors on lui attribue une valeur négative égale à -1000
+        // Si le pion a comme voisin de droite une ligne horizontale de x-1 pions du joueur 1, alors on lui attribue une valeur negative egale a -1000
         //Vers la droite
         if (botPosX < n - x) {
             int score = 0;
@@ -1093,7 +1093,7 @@ bool movePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n], 
                 valeurPion[i] -= 1000;
             }
         }
-        // Si le pion a comme voisin de gauche une ligne horizontale de x-1 pions du joueur 1, alors on lui attribue une valeur négative égale à -1000
+        // Si le pion a comme voisin de gauche une ligne horizontale de x-1 pions du joueur 1, alors on lui attribue une valeur negative egale a -1000
         //Vers la gauche
         if (botPosX > x - 2) {
             int score = 0;
@@ -1193,11 +1193,11 @@ bool movePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n], 
     }
     Sleep(1);
 
-    //Comme dans la fonction "placePionIA" on évalue les cases en fonction du placement des pions du joueur 1
+    //Comme dans la fonction "placePionIA" on evalue les cases en fonction du placement des pions du joueur 1
     AIeval2(n,plateau,*joueur,valeurCase,x);
     Sleep(1);
 
-    //On évalue les cases qui ont le plus de valeur et on pose un pion sur la case qui a la plus grande valeur (si la case est vide)
+    //On evalue les cases qui ont le plus de valeur et on pose un pion sur la case qui a la plus grande valeur (si la case est vide)
     int max = 0;
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
@@ -1210,7 +1210,7 @@ bool movePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n], 
         }
     }
     Sleep(1);
-    //On déplace le pion avec la plus grande valeur sur la case qui a la plus grande valeur
+    //On deplace le pion avec la plus grande valeur sur la case qui a la plus grande valeur
     int oldPosX = pions[joueur->equipe - 1][pionMax].pos->posX -1;
     int oldPosY = pions[joueur->equipe - 1][pionMax].pos->posY -1;
     plateau[oldPosY][oldPosX].isEmpty = true;
@@ -1221,13 +1221,13 @@ bool movePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n], 
     pions[joueur->equipe - 1][pionMax].pos->posY = botPosY + 1;
     bool hasWin = false;
     hasWin = scorePoint2(n,x,plateau,plateau[botPosY][botPosX],botPosX,botPosY);
-    // On réinitialise les valeurs des cases
+    // On reinitialise les valeurs des cases
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
             valeurCase[i][j] = 0;
         }
     }
-    // On réinitialise les valeurs des pions
+    // On reinitialise les valeurs des pions
     for (i = 0; i < 4; i++) {
         valeurPion[i] = 0;
     }
@@ -1235,8 +1235,8 @@ bool movePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n], 
 }
 
 
-//Fonction "restartGame" qui permet de lancer la dernière partie sauvegardée dans le fichier save.txt
-//On restaure les paramètres du plateau, et des joueurs à partir du contenu du fichier save.txt
+//Fonction "restartGame" qui permet de lancer la derniere partie sauvegardee dans le fichier save.txt
+//On restaure les parametres du plateau, et des joueurs a partir du contenu du fichier save.txt
 //Exemple de sauvegarde :
 //
 //
@@ -1244,7 +1244,7 @@ bool movePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n], 
 //Statut de la partie : AI
 //Informations du plateau :
 //Longueur du plateau : 10
-//Nombre de pions à aligner : 4
+//Nombre de pions a aligner : 4
 //Positions des pions :
 //0 ,Pion 0, equipe 1 - X: 1 - Y: 1  - Voisins : N: 0 - E: 2 - S: 11 - O: 0 - NE: 0 - SE: 12 - SO: 0 - NO: 0
 //0 ,Pion 0, equipe 2 - X: 2 - Y: 1  - Voisins : N: 0 - E: 3 - S: 12 - O: 1 - NE: 0 - SE: 13 - SO: 11 - NO: 0
@@ -1366,9 +1366,9 @@ int compte()
         c2 = c;
     }
 
-    /* Ici, c2 est égal au caractère juste avant le EOF. */
+    /* Ici, c2 est egal au caractere juste avant le EOF. */
     if(c2 != '\n')
-        nLignes++; /* Dernière ligne non finie */
+        nLignes++; /* Derniere ligne non finie */
 
 
     return nLignes;
@@ -1382,7 +1382,7 @@ void restartGame() {
     for (int i = 0; i < nbLigne; i++) {
         char ligne[100];
         fgets(ligne, 100, fichier);
-        //Si il s'agit de la 2eme ligne, on récupère le statut de la partie ("AI" "ou "Multi-joueur")
+        //Si il s'agit de la 2eme ligne, on recupere le statut de la partie ("AI" "ou "Multi-joueur")
         if(i == 3) {
             printf("%d - %s | ",i,ligne);
             if (ligne[22] == 'A') {
@@ -1392,26 +1392,26 @@ void restartGame() {
                 gameMode = 2;
             }
         }
-        //Si il s'agit de la 4eme ligne, on récupère la longueur du plateau
+        //Si il s'agit de la 4eme ligne, on recupere la longueur du plateau
         if (i == 5){
 
-            //On récupère la longueur du plateau (a partir de la 23 eme lettre de la ligne), et on la convertit en int
+            //On recupere la longueur du plateau (a partir de la 23 eme lettre de la ligne), et on la convertit en int
             boardSize = ligne[22] - '0';
-            //On check si la longueur du plateau est supérieur à 9
+            //On check si la longueur du plateau est superieur a 9
             int j = 1;
             while (ligne[22 + j] != ' '){
                 boardSize = boardSize * 10 + ligne[22 + j] - '0';
                 j++;
             }
         }
-        //Si il s'agit de la 5eme ligne, on récupère le nombre de pions max par joueur
+        //Si il s'agit de la 5eme ligne, on recupere le nombre de pions max par joueur
         if (i == 6){
             printf("%d - %s",i,ligne);
 
-            //On récupère le nombre de pions max par joueur (a partir de la 30 eme lettre de la ligne), et on le convertit en int
+            //On recupere le nombre de pions max par joueur (a partir de la 30 eme lettre de la ligne), et on le convertit en int
             maxPawns = ligne[29] - '0';
 
-            //On check si le nombre de pions max par joueur est supérieur à 9
+            //On check si le nombre de pions max par joueur est superieur a 9
             int j = 1;
             while (ligne[29 + j] != ' '){
                 maxPawns = maxPawns * 10 + ligne[29 + j] - '0';
@@ -1419,12 +1419,12 @@ void restartGame() {
             }
         }
         //Si
-        // il s'agit de la 6eme ligne, on récupère le nombre de pions à aligner pour gagner
+        // il s'agit de la 6eme ligne, on recupere le nombre de pions a aligner pour gagner
         if (i == 7){
             printf("%d - %s",i,ligne);
-           // On récupère le nombre de pions à aligner pour gagner (a partir de la 29 eme lettre de la ligne), et on le convertit en int
+           // On recupere le nombre de pions a aligner pour gagner (a partir de la 29 eme lettre de la ligne), et on le convertit en int
             winPawns = ligne[29] - '0';
-            //On check si le nombre de pions max par joueur est supérieur à 9
+            //On check si le nombre de pions max par joueur est superieur a 9
             int j = 1;
             while (ligne[29 + j] != ' '){
                 winPawns = winPawns * 10 + ligne[29 + j] - '0';
@@ -1432,11 +1432,11 @@ void restartGame() {
             }
 
         }
-//        //Si il s'agit de l'avant avant dernière ligne , on récupère le nombre de pions du joueur 1
+//        //Si il s'agit de l'avant avant derniere ligne , on recupere le nombre de pions du joueur 1
 //        if (i == nbLigne - 3){
-//            //On récupère le nombre de pions du joueur 1 (a partir de la 19 eme lettre de la ligne), et on le convertit en int
+//            //On recupere le nombre de pions du joueur 1 (a partir de la 19 eme lettre de la ligne), et on le convertit en int
 //            nbP1 = ligne[18] - '0';
-//            //On check si le nombre de pions du joueur 1 est supérieur à 9
+//            //On check si le nombre de pions du joueur 1 est superieur a 9
 //            int j = 1;
 //            while (ligne[18 + j] != ' '){
 //                nbP1 = nbP1 * 10 + ligne[18 + j] - '0';
@@ -1445,11 +1445,11 @@ void restartGame() {
 //            printf("Nombre de pions joueur 1 : %d",nbP1);
 //
 //        }
-//        //Si il s'agit de la dernière ligne , on récupère le nombre de pions du joueur 2
+//        //Si il s'agit de la derniere ligne , on recupere le nombre de pions du joueur 2
 //        if (i == nbLigne - 1){
-//            //On récupère le nombre de pions du joueur 2 (a partir de la 19 eme lettre de la ligne), et on le convertit en int
+//            //On recupere le nombre de pions du joueur 2 (a partir de la 19 eme lettre de la ligne), et on le convertit en int
 //            nbP2 = ligne[18] - '0';
-//            //On check si le nombre de pions du joueur 2 est supérieur à 9
+//            //On check si le nombre de pions du joueur 2 est superieur a 9
 //            int j = 1;
 //            while (ligne[18 + j] != ' '){
 //                nbP2 = nbP2 * 10 + ligne[18 + j] - '0';
@@ -1461,13 +1461,13 @@ void restartGame() {
     }
     //On ferme le fichier
     fclose(fichier);
-    //On créer le plateau
+    //On creer le plateau
     struct Case plateau[boardSize][boardSize];
     //CreatePlateau(boardSize, plateau);
     struct Pion pions[2][maxPawns];
     CreatePlateau(boardSize, plateau);
 
-    //Création des joueurs
+    //Creation des joueurs
     struct Joueur joueur1 = (struct Joueur) {1, 1, 0, 0, 'X', 12, 0, 0, false};
     struct Joueur joueur2 = (struct Joueur) {2, 2, 0, 0, 'O', 2, 0, 0, false};
     int i = 0;
@@ -1475,39 +1475,39 @@ void restartGame() {
     for (i=0; i < nbLigne; i++){
         char ligne[150];
         fgets(ligne, 10+(boardSize * boardSize), fichier2);
-        //On check de la ligne 8 à la ligne 8 + n*n pour récupérer les informations des cases
+        //On check de la ligne 8 a la ligne 8 + n*n pour recuperer les informations des cases
         if (i >= 8 && i <= 8 + (boardSize * boardSize)){
 
-            //Si la première lettre de la ligne est un
-            // "0" alors la case contient un pion, on récupère les informations du pion, on l'attribue au joueur concerné et on le place sur le plateau
+            //Si la premiere lettre de la ligne est un
+            // "0" alors la case contient un pion, on recupere les informations du pion, on l'attribue au joueur concerne et on le place sur le plateau
 
             if (ligne[0] == '0') {
 
                 int idPion, idEquipe, x, y;
-                // a partir 9ème lettre de la ligne = idPion
+                // a partir 9eme lettre de la ligne = idPion
                 idPion = ligne[8] - '0';
                 int j = 1;
                 while (ligne[8 + j] != ' ') {
                     idPion = idPion * 10 + ligne[8 + j] - '0';
                     j++;
                 }
-                // 19ème lettre de la ligne = idEquipe
+                // 19eme lettre de la ligne = idEquipe
                 idEquipe = ligne[18] - '0';
-                // à partir 26ème lettre de la ligne = x
+                // a partir 26eme lettre de la ligne = x
                 x = ligne[25] - '0';
                 j = 1;
                 while (ligne[25 + j] != ' ') {
                     x = x * 10 + ligne[25 + j] - '0';
                     j++;
                 }
-                // à partir 33ème lettre de la ligne = y
+                // a partir 33eme lettre de la ligne = y
                 y = ligne[32] - '0';
                 j = 1;
                 while (ligne[32 + j] != ' ') {
                     y = y * 10 + ligne[32 + j] - '0';
                     j++;
                 }
-                //On créer le pion
+                //On creer le pion
                 if (idEquipe == 1) {
                     pions[0][idPion] = (struct Pion) {idPion, &joueur1, &plateau[x][y]};
                     plateau[x][y].pion = &pions[0][idPion];
@@ -1569,7 +1569,7 @@ void restartGame() {
         printf("\n");
         printf("---------------------");
         printf("\n");
-        printf("-> Le joueur %d a gagné\n", winner);
+        printf("-> Le joueur %d a gagne\n", winner);
         sleep(15);
     }else{
         bool hasWin = false;
@@ -1607,7 +1607,7 @@ void restartGame() {
         printf("\n");
         printf("---------------------");
         printf("\n");
-        printf("-> Le joueur %d a gagné\n", winner);
+        printf("-> Le joueur %d a gagne\n", winner);
         Sleep(15);
     }
 
@@ -1692,7 +1692,7 @@ void restartGame() {
 //            printf("\n");
 //            printf("---------------------");
 //            printf("\n");
-//            printf("-> Le joueur %d a gagné\n", winner);
+//            printf("-> Le joueur %d a gagne\n", winner);
 //            sleep(15);
 //        }else{
 //
@@ -1703,27 +1703,27 @@ void restartGame() {
 void MultiJoueur2(){
     int n,p, i,j;
     do{
-        printf("\n-> Veuillez saisir une longueur supérieure ou égale à 4 : ");
+        printf("\n-> Veuillez saisir une longueur superieure ou egale a 4 : ");
         scanf("%d", &n);
     }while (n < 4 || n < 0);
-    // On demande le nombre de pions strictement positif et inérieur à la longueur du plateau divisée par deux
+    // On demande le nombre de pions strictement positif et inerieur a la longueur du plateau divisee par deux
     do{
-        printf("\n-> Veuillez saisir le nombre de pions  strictement positif et inférieur à %d : ", n/2);
+        printf("\n-> Veuillez saisir le nombre de pions  strictement positif et inferieur a %d : ", n/2);
         scanf("%d", &p);
     }while (p < 1 || p > (n/2)-1);
-    //On demande le nombre de pions à aligner  positif et inférieur ou égal à p
+    //On demande le nombre de pions a aligner  positif et inferieur ou egal a p
     int x;
     do{
-        printf("\n-> Veuillez saisir le nombre de pions à aligner strictement positif et inférieur ou égal à %d : ", p);
+        printf("\n-> Veuillez saisir le nombre de pions a aligner strictement positif et inferieur ou egal a %d : ", p);
         scanf("%d", &x);
     }while (x < 1 || x > p);
 
-    //Création du plateau de jeu
+    //Creation du plateau de jeu
     struct Case plateau[n][n];
     CreatePlateau(n, plateau);
     struct Pion pions[2][p];
 
-    //Création des joueurs
+    //Creation des joueurs
     struct Joueur joueur1 = (struct Joueur){1,1,0,0,'X',12, 0,0,false};
     struct Joueur joueur2 = (struct Joueur){2,2,0,0,'O',2,0,0,false};
     bool hasWin = false;
@@ -1761,7 +1761,7 @@ void MultiJoueur2(){
     printf("\n");
     printf("---------------------");
     printf("\n");
-    printf("-> Le joueur %d a gagné\n", winner);
+    printf("-> Le joueur %d a gagne\n", winner);
     Sleep(15);
 }
 
@@ -1769,26 +1769,26 @@ void MultiJoueur2(){
 void IA2() {
     int x, n, i, j, p;
     do {
-        printf("\n-> Veuillez saisir une longueur supérieure ou égale à 4 : ");
+        printf("\n-> Veuillez saisir une longueur superieure ou egale a 4 : ");
         scanf("%d", &n);
     } while (n < 4 || n < 0);
-    // On demande le nombre de pions strictement positif et inérieur à la longueur du plateau divisée par deux
+    // On demande le nombre de pions strictement positif et inerieur a la longueur du plateau divisee par deux
     do {
-        printf("\n-> Veuillez saisir un nombre de pions strictement positif et inférieur à %d : ", n / 2);
+        printf("\n-> Veuillez saisir un nombre de pions strictement positif et inferieur a %d : ", n / 2);
         scanf("%d", &p);
     } while (p < 1 || p > (n / 2)-1);
-    //On demande au joueur de choisir le nombre de pions à aligner ( inférieur ou égal à p)
+    //On demande au joueur de choisir le nombre de pions a aligner ( inferieur ou egal a p)
     do {
-        printf("\n-> Veuillez saisir un nombre de pions à aligner strictement positif et inférieur ou égal à %d : ", p);
+        printf("\n-> Veuillez saisir un nombre de pions a aligner strictement positif et inferieur ou egal a %d : ", p);
         scanf("%d", &x);
     } while (x < 1 || x > p);
 
-    //Création du plateau de jeu
+    //Creation du plateau de jeu
     struct Case plateau[n][n];
     CreatePlateau(n, plateau);
     struct Pion pions[2][p];
 
-    //Création des joueurs
+    //Creation des joueurs
     struct Joueur joueur1 = (struct Joueur) {1, 1, 0, 0, 'X', 12, 0, 0, false};
     struct Joueur joueur2 = (struct Joueur) {2, 2, 0, 0, 'O', 2, 0, 0, false};
     bool hasWin = false;
@@ -1830,7 +1830,7 @@ void IA2() {
     printf("\n");
     printf("---------------------");
     printf("\n");
-    printf("-> Le joueur %d a gagné\n", winner);
+    printf("-> Le joueur %d a gagne\n", winner);
     sleep(15);
 }
 
@@ -1844,7 +1844,7 @@ void AffichageMenu(int choix){
             textColor(15,0);
             printf("] Jouer contre l'ordinateur\n");
             printf("[ ] Jouer contre un autre joueur\n");
-            printf("[ ] Charger une partie sauvegardée\n");
+            printf("[ ] Charger une partie sauvegardee\n");
             break;
         case 2:
             printf("[ ] Jouer contre l'ordinateur\n");
@@ -1853,7 +1853,7 @@ void AffichageMenu(int choix){
             printf("%c",(char) 219);
             textColor(15,0);
             printf("] Jouer contre un autre joueur\n");
-            printf("[ ] Charger une partie sauvegardée\n");
+            printf("[ ] Charger une partie sauvegardee\n");
             break;
         case 3:
             printf("[ ] Jouer contre l'ordinateur\n");
@@ -1862,7 +1862,7 @@ void AffichageMenu(int choix){
             textColor(4,0);
             printf("%c",(char) 219);
             textColor(15,0);
-            printf("] Charger une partie sauvegardée\n");
+            printf("] Charger une partie sauvegardee\n");
             break;
         default:
 
@@ -1871,8 +1871,8 @@ void AffichageMenu(int choix){
 }
 
 
-//Fonction menu qui permet de sélectionner entre jouer contre l'ordinateur ou contre un autre joueur
-//Naviguation avec les flèches du clavier et validation avec la touche entrée
+//Fonction menu qui permet de selectionner entre jouer contre l'ordinateur ou contre un autre joueur
+//Naviguation avec les fleches du clavier et validation avec la touche entree
 void menu(){
     int choix = 1;
     bool hasSelected = false;
