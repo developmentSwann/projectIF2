@@ -50,7 +50,7 @@ void textColor(int couleurDuTexte,int couleurDeFond)
 }
 
 
-void affichagePlateau(int n,struct Case plateau[n][n],struct Joueur *joueur, int selecType){
+void affichagePlateau(int n,int p,struct Case plateau[n][n],struct Joueur *joueur, int selecType){
     int i,j;
     int playerPosX = joueur->posX;
     int playerPosY = joueur->posY;
@@ -92,7 +92,14 @@ void affichagePlateau(int n,struct Case plateau[n][n],struct Joueur *joueur, int
 
         }
     }
+
     printf("\n\n");
+    printf("---------------------");
+    printf("Informations du joueur :\n");
+    printf("Equipe : %d\n",joueur->equipe);
+    printf("Pions places : %d\n",joueur->nbPion);
+    printf("Pions restants : %d\n",(p-joueur->nbPion));
+
     printf("---------------------");
     printf("\n");
     printf("[TAB] pour valider");
@@ -425,7 +432,7 @@ bool scorePoint2(int n,int x ,struct Case plateau[n][n],struct Case actualCase,i
 
 }
 
-void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,struct Pion pions[2][p], int *posX, int *posY,int selecType){
+void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *joueur,struct Pion pions[2][p], int *posX, int *posY,int selecType){
     bool hasMoove = false;
     bool hasSelected = false;
     bool hasWin = false;
@@ -438,7 +445,7 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
             if (pressedScore ==1){
                 joueur->posX = joueur->posX + 1;
                 clearScreen();
-                affichagePlateau(n,plateau,joueur,selecType);
+                affichagePlateau(n,p,plateau,joueur,selecType);
                 Sleep(250);
 
                 pressedScore=0;
@@ -451,7 +458,7 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
             if (pressedScore ==1){
                 joueur->posX = joueur->posX - 1;
                 clearScreen();
-                affichagePlateau(n,plateau,joueur,selecType);
+                affichagePlateau(n,p,plateau,joueur,selecType);
                 Sleep(250);
 
                 pressedScore=0;
@@ -463,7 +470,7 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
             if (pressedScore ==1){
                 joueur->posY = joueur->posY - 1;
                 clearScreen();
-                affichagePlateau(n,plateau,joueur,selecType);
+                affichagePlateau(n,p,plateau,joueur,selecType);
                 Sleep(250);
 
                 pressedScore=0;
@@ -475,7 +482,7 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
             if (pressedScore ==1){
                 joueur->posY = joueur->posY + 1;
                 clearScreen();
-                affichagePlateau(n,plateau,joueur,selecType);
+                affichagePlateau(n,p,plateau,joueur,selecType);
                 Sleep(250);
 
                 pressedScore=0;
@@ -513,7 +520,7 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
                         *posX = joueur->posX;
                         *posY = joueur->posY;
                         clearScreen();
-                        affichagePlateau(n,plateau,joueur,0);
+                        affichagePlateau(n,p,plateau,joueur,0);
                         hasSelected = true;
                     }
                 }
@@ -526,12 +533,12 @@ void CaseSelector2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,
 bool placePion2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,struct Pion pions[2][p],int x){
     bool hasWin = false;
     int posX,posY = 0;
-    affichagePlateau(n, plateau,joueur,0);
+    affichagePlateau(n,p,plateau,joueur,0);
     printf("\n");
     printf("---------------------");
     printf("\n");
     printf("-> Joueur %d, placez votre pion\n", joueur->equipe);
-    CaseSelector2(n,p, plateau, joueur, pions,&posX, &posY,0);
+    CaseSelector2(n,p, x,plateau, joueur, pions,&posX, &posY,0);
     hasWin = scorePoint2(n,x,plateau,plateau[posY][posX],posX,posY);
     {if (hasWin == true) {
             printf("\nLe joueur %d a gagne", joueur->equipe);
@@ -543,18 +550,18 @@ bool placePion2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,str
 bool movePion2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,struct Pion pions[2][p],int x){
     bool hasWin = false;
     int posX,posY = 0;
-    affichagePlateau(n, plateau,joueur,1);
+    affichagePlateau(n, p,plateau,joueur,1);
     printf("\n");
     printf("---------------------");
     printf("\n");
     printf("-> Joueur %d, deplacez votre pion\n", joueur->equipe);
-    CaseSelector2(n,p, plateau, joueur, pions,&posX, &posY,1);
-    affichagePlateau(n, plateau,joueur,2);
+    CaseSelector2(n,p,x, plateau, joueur, pions,&posX, &posY,1);
+    affichagePlateau(n,p, plateau,joueur,2);
     printf("\n");
     printf("---------------------");
     printf("\n");
     printf("-> Joueur %d, deplacez votre pion\n", joueur->equipe);
-    CaseSelector2(n,p, plateau, joueur, pions,&posX, &posY,2);
+    CaseSelector2(n,p,x, plateau, joueur, pions,&posX, &posY,2);
     hasWin = scorePoint2(n,x,plateau,plateau[posY][posX],posX,posY);
     {if (hasWin == true) {
             printf("\nLe joueur %d a gagne", joueur->equipe);
@@ -1030,7 +1037,7 @@ bool placePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n],
             valeurCase[i][j] = 0;
         }
     }
-    affichagePlateau(n, plateau,joueur,0);
+    affichagePlateau(n,p, plateau,joueur,0);
     return hasWin;
 
 
@@ -1536,7 +1543,7 @@ void restartGame() {
         while (joueur2.nbPion <= maxPawns - 1) {
             hasWin = placePion2(boardSize, maxPawns, plateau, &joueur1, pions, winPawns);
             if (hasWin == false) {
-                hasWin = placePionIA2(boardSize, maxPawns, &joueur2, plateau, pions, winPawns);
+                hasWin = placePionIA2(boardSize, maxPawns,winPawns, &joueur2, plateau, pions);
                 if (hasWin) {
                     winner = 2;
                     break;
