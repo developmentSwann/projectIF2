@@ -47,12 +47,12 @@ struct Joueur {
     int color;
     int posX;
     int posY;
-    bool hasPlacedInZero;
+    int hasUsedSpecial;
 };
 
 
 
-void affichagePlateau(int n,int p,struct Case plateau[n][n],struct Joueur *joueur, int selecType){
+void affichagePlateau(int n,int p,struct Case plateau[n][n],struct Joueur *joueur, int selecType,int gamePhase){
     int i,j;
     int playerPosX = joueur->posX;
     int playerPosY = joueur->posY;
@@ -105,6 +105,9 @@ void affichagePlateau(int n,int p,struct Case plateau[n][n],struct Joueur *joueu
     printf("---------------------");
     printf("\n");
     printf("[TAB] pour valider");
+    if (gamePhase == 2){
+        printf(" | [S] Coup special");
+    }
     printf("\n[%c] pour monter",(char)24);
     printf("\n[%c] pour descendre",(char)25);
     printf("\n[->] pour aller a droite");
@@ -433,7 +436,7 @@ bool scorePoint2(int n,int x ,struct Case plateau[n][n],struct Case actualCase,i
 
 }
 
-void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *joueur,struct Pion pions[2][p], int *posX, int *posY,int selecType){
+void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *joueur,struct Pion pions[2][p], int *posX, int *posY,int selecType,int gamePhase){
     bool hasMoove = false;
     bool hasSelected = false;
     bool hasWin = false;
@@ -446,7 +449,7 @@ void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *j
             if (pressedScore ==1){
                 joueur->posX = joueur->posX + 1;
                 clearScreen();
-                affichagePlateau(n,p,plateau,joueur,selecType);
+                affichagePlateau(n,p,plateau,joueur,selecType,gamePhase);
                 Sleep(250);
 
                 pressedScore=0;
@@ -459,7 +462,7 @@ void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *j
             if (pressedScore ==1){
                 joueur->posX = joueur->posX - 1;
                 clearScreen();
-                affichagePlateau(n,p,plateau,joueur,selecType);
+                affichagePlateau(n,p,plateau,joueur,selecType,gamePhase);
                 Sleep(250);
 
                 pressedScore=0;
@@ -471,7 +474,7 @@ void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *j
             if (pressedScore ==1){
                 joueur->posY = joueur->posY - 1;
                 clearScreen();
-                affichagePlateau(n,p,plateau,joueur,selecType);
+                affichagePlateau(n,p,plateau,joueur,selecType,gamePhase);
                 Sleep(250);
 
                 pressedScore=0;
@@ -483,11 +486,34 @@ void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *j
             if (pressedScore ==1){
                 joueur->posY = joueur->posY + 1;
                 clearScreen();
-                affichagePlateau(n,p,plateau,joueur,selecType);
+                affichagePlateau(n,p,plateau,joueur,selecType,gamePhase);
                 Sleep(250);
 
                 pressedScore=0;
             }
+        }
+        if (gamePhase == 2 && joueur->hasUsedSpecial == 0){
+            //Detecte si la touche S est pressée et qu'il se situe sur une case occupée par l'un de ses pions
+            if (GetAsyncKeyState(0x53) && plateau[joueur->posY][joueur->posX].pion != NULL && plateau[joueur->posY][joueur->posX].pion->equipe->equipe == joueur->equipe){
+                pressedScore = pressedScore +1;
+                if (pressedScore >= 1) {
+                    //On supprime le pion du plateau et on enlève un pion au compteur du joueur
+                    int idPion = plateau[joueur->posY][joueur->posX].pion->id;
+                    plateau[joueur->posY][joueur->posX].pion = NULL;
+                    plateau[joueur->posY][joueur->posX].isEmpty = true;
+                    joueur->nbPion = joueur->nbPion - 1;
+                    joueur->hasUsedSpecial = 1;
+                    clearScreen();
+                    affichagePlateau(n,p,plateau,joueur,selecType,gamePhase);
+                    Sleep(250);
+
+                    pressedScore=0;
+                    hasSelected = true;
+
+
+                }
+            }
+
         }
         //Detecte si la touche entree est pressee
         if (GetAsyncKeyState(VK_TAB)){
@@ -521,7 +547,7 @@ void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *j
                         *posX = joueur->posX;
                         *posY = joueur->posY;
                         clearScreen();
-                        affichagePlateau(n,p,plateau,joueur,0);
+                        affichagePlateau(n,p,plateau,joueur,0,gamePhase);
                         hasSelected = true;
                     }
                 }
@@ -534,12 +560,12 @@ void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *j
 bool placePion2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,struct Pion pions[2][p],int x){
     bool hasWin = false;
     int posX,posY = 0;
-    affichagePlateau(n,p,plateau,joueur,0);
+    affichagePlateau(n,p,plateau,joueur,0,1);
     printf("\n");
     printf("---------------------");
     printf("\n");
     printf("-> Joueur %d, placez votre pion\n", joueur->equipe);
-    CaseSelector2(n,p, x,plateau, joueur, pions,&posX, &posY,0);
+    CaseSelector2(n,p, x,plateau, joueur, pions,&posX, &posY,0,1);
     hasWin = scorePoint2(n,x,plateau,plateau[posY][posX],posX,posY);
 
         return hasWin;
@@ -549,20 +575,21 @@ bool placePion2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,str
 bool movePion2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,struct Pion pions[2][p],int x){
     bool hasWin = false;
     int posX,posY = 0;
-    affichagePlateau(n, p,plateau,joueur,1);
+    affichagePlateau(n, p,plateau,joueur,1,2);
     printf("\n");
     printf("---------------------");
     printf("\n");
     printf("-> Joueur %d, deplacez votre pion\n", joueur->equipe);
-    CaseSelector2(n,p,x, plateau, joueur, pions,&posX, &posY,1);
-    affichagePlateau(n,p, plateau,joueur,2);
-    printf("\n");
-    printf("---------------------");
-    printf("\n");
-    printf("-> Joueur %d, deplacez votre pion\n", joueur->equipe);
-    CaseSelector2(n,p,x, plateau, joueur, pions,&posX, &posY,2);
-    hasWin = scorePoint2(n,x,plateau,plateau[posY][posX],posX,posY);
-
+    CaseSelector2(n,p,x, plateau, joueur, pions,&posX, &posY,1,2);
+    affichagePlateau(n,p, plateau,joueur,2,2);
+    if (joueur->hasUsedSpecial == 0) {
+        printf("\n");
+        printf("---------------------");
+        printf("\n");
+        printf("-> Joueur %d, deplacez votre pion\n", joueur->equipe);
+        CaseSelector2(n, p, x, plateau, joueur, pions, &posX, &posY, 2, 2);
+        hasWin = scorePoint2(n, x, plateau, plateau[posY][posX], posX, posY);
+    }
         return hasWin;
 
 }
@@ -1034,7 +1061,7 @@ bool placePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n],
             valeurCase[i][j] = 0;
         }
     }
-    affichagePlateau(n,p, plateau,joueur,0);
+    affichagePlateau(n,p, plateau,joueur,0,0);
     Sleep(1000);
     return hasWin;
 
@@ -1346,8 +1373,8 @@ void restartGame() {
     CreatePlateau(boardSize, plateau);
 
     //Creation des joueurs
-    struct Joueur joueur1 = (struct Joueur) {1, 1, 0, 0, 'X', 12, 0, 0, false};
-    struct Joueur joueur2 = (struct Joueur) {2, 2, 0, 0, 'O', 2, 0, 0, false};
+    struct Joueur joueur1 = (struct Joueur) {1, 1, 0, 0, 'X', 12, 0, 0, 0};
+    struct Joueur joueur2 = (struct Joueur) {2, 2, 0, 0, 'O', 2, 0, 0, 0};
     int i = 0;
     FILE *fichier2 = fopen("save.txt", "r");
     for (i=0; i < nbLigne; i++){
@@ -1388,16 +1415,16 @@ void restartGame() {
                 }
                 //On creer le pion
                 if (idEquipe == 1) {
-                    pions[0][idPion] = (struct Pion) {idPion, &joueur1, &plateau[x][y]};
-                    plateau[x][y].pion = &pions[0][idPion];
-                    plateau[x][y].isEmpty = false;
+                    pions[0][idPion] = (struct Pion) {idPion, &joueur1, &plateau[y][x]};
+                    plateau[y][x].pion = &pions[0][idPion];
+                    plateau[y][x].isEmpty = false;
                     joueur1.nbPion++;
 
 
                 } else {
-                    pions[1][idPion] = (struct Pion) {idPion, &joueur2, &plateau[x][y]};
-                    plateau[x][y].pion = &pions[1][idPion];
-                    plateau[x][y].isEmpty = false;
+                    pions[1][idPion] = (struct Pion) {idPion, &joueur2, &plateau[y][x]};
+                    plateau[y][x].pion = &pions[1][idPion];
+                    plateau[y][x].isEmpty = false;
                     joueur2.nbPion++;
                 }
             }
@@ -1429,7 +1456,12 @@ void restartGame() {
         }
         do {
             if (!hasWin) {
-                hasWin = movePion2(boardSize, maxPawns, plateau, &joueur1, pions, winPawns);
+                if (joueur1.hasUsedSpecial == 1){
+                    hasWin = placePion2(boardSize, maxPawns, plateau, &joueur1, pions, winPawns);
+                    joueur1.hasUsedSpecial = 0;
+                }else{
+                    hasWin = movePion2(boardSize, maxPawns, plateau, &joueur1, pions, winPawns);
+                }
                 if (hasWin == false) {
                     hasWin = movePionIA2(boardSize, maxPawns, &joueur2, plateau, pions, winPawns);
                     if (hasWin) {
@@ -1460,6 +1492,7 @@ void restartGame() {
         bool hasWin = false;
         int winner= 0;
         while (joueur2.nbPion <= maxPawns-1){
+
             hasWin = placePion2(boardSize, maxPawns,plateau,&joueur1,pions,winPawns);
             if (hasWin == false){
                 hasWin = placePion2(boardSize, maxPawns,plateau,&joueur2,pions,winPawns);
@@ -1476,9 +1509,20 @@ void restartGame() {
         do {
             if (hasWin)
                 break;
-            hasWin = movePion2(boardSize, maxPawns,plateau,&joueur1,pions,winPawns);
+            if (joueur1.hasUsedSpecial == 1){
+                hasWin = placePion2(boardSize, maxPawns, plateau, &joueur1, pions, winPawns);
+                joueur1.hasUsedSpecial = 0;
+            }else{
+                hasWin = movePion2(boardSize, maxPawns,plateau,&joueur1,pions,winPawns);
+
+            }
             if (hasWin == false){
-                hasWin = movePion2(boardSize, maxPawns,plateau,&joueur2,pions,winPawns);
+                if (joueur2.hasUsedSpecial == 1){
+                    hasWin = placePion2(boardSize, maxPawns, plateau, &joueur2, pions, winPawns);
+                    joueur2.hasUsedSpecial = 0;
+                }else{
+                    hasWin = movePion2(boardSize, maxPawns,plateau,&joueur2,pions,winPawns);
+                }
                 if (hasWin){
                     winner = 2;
                     break;
@@ -1579,9 +1623,9 @@ void MultiJoueur2(){
     struct Pion pions[2][p];
 
     //Creation des joueurs
-    struct Joueur joueur1 = (struct Joueur){1,1,0,0,'X',12, 0,0,false};
+    struct Joueur joueur1 = (struct Joueur){1,1,0,0,'X',12, 0,0,0};
 
-    struct Joueur joueur2 = (struct Joueur){2,2,0,0,'O',2,0,0,false};
+    struct Joueur joueur2 = (struct Joueur){2,2,0,0,'O',2,0,0,0};
     bool hasWin = false;
     int winner= 0;
     while (joueur2.nbPion <= p-1){
@@ -1599,11 +1643,24 @@ void MultiJoueur2(){
         shouldSave(n,p,x,plateau,&joueur1,&joueur2,pions,1);
     }
     do {
-        if (hasWin)
+        if (hasWin){
             break;
-        hasWin = movePion2(n,p,plateau,&joueur1,pions,x);
+        }
+        if (joueur1.hasUsedSpecial == 1){
+
+            hasWin = placePion2(n,p,plateau,&joueur1,pions,x);
+            joueur1.hasUsedSpecial = 0;
+        }else {
+
+            hasWin = movePion2(n,p,plateau,&joueur1,pions,x);
+        }
         if (hasWin == false){
-            hasWin = movePion2(n,p,plateau,&joueur2,pions,x);
+            if (joueur2.hasUsedSpecial == 1){
+                hasWin = placePion2(n,p,plateau,&joueur2,pions,x);
+                joueur2.hasUsedSpecial = 0;
+            }else {
+                hasWin = movePion2(n,p,plateau,&joueur2,pions,x);
+            }
             if (hasWin){
                 winner = 2;
                 break;
@@ -1655,6 +1712,7 @@ void IA2() {
     int winner = 0;
     //Placement des pions du joueur 1 et intelligence artificielle pour un placement automatique des pions du joueur 2
     while (joueur2.nbPion <= p - 1) {
+
         hasWin = placePion2(n, p,  plateau, &joueur1,pions,x);
         if (hasWin == false) {
             hasWin = placePionIA2(n, p, &joueur2, plateau, pions, x);
@@ -1670,7 +1728,12 @@ void IA2() {
     }
     do {
         if (!hasWin){
-            hasWin = movePion2(n,p,plateau,&joueur1,pions,x);
+            if (joueur1.hasUsedSpecial == 1){
+                hasWin = placePion2(n,p,plateau,&joueur1,pions,x);
+                joueur1.hasUsedSpecial = 0;
+            }else {
+                hasWin = movePion2(n,p,plateau,&joueur1,pions,x);
+            }
             if (hasWin == false){
                 hasWin = movePionIA2(n,p,&joueur2,plateau,pions,x);
                 if (hasWin){
