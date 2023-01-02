@@ -42,7 +42,6 @@ struct Joueur {
     int id;
     int equipe;
     int nbPion;
-    int score;
     char icon;
     int color;
     int posX;
@@ -1373,8 +1372,8 @@ void restartGame() {
     CreatePlateau(boardSize, plateau);
 
     //Creation des joueurs
-    struct Joueur joueur1 = (struct Joueur) {1, 1, 0, 0, 'X', 12, 0, 0, 0};
-    struct Joueur joueur2 = (struct Joueur) {2, 2, 0, 0, 'O', 2, 0, 0, 0};
+    struct Joueur joueur1 = (struct Joueur) {1, 1,  0, 'X', 12, 0, 0, 0};
+    struct Joueur joueur2 = (struct Joueur) {2, 2,  0, 'O', 2, 0, 0, 0};
     int i = 0;
     FILE *fichier2 = fopen("save.txt", "r");
     for (i=0; i < nbLigne; i++){
@@ -1623,9 +1622,9 @@ void MultiJoueur2(){
     struct Pion pions[2][p];
 
     //Creation des joueurs
-    struct Joueur joueur1 = (struct Joueur){1,1,0,0,'X',12, 0,0,0};
+    struct Joueur joueur1 = (struct Joueur){1,1,0,'X',12, 0,0,0};
 
-    struct Joueur joueur2 = (struct Joueur){2,2,0,0,'O',2,0,0,0};
+    struct Joueur joueur2 = (struct Joueur){2,2,0,'O',2,0,0,0};
     bool hasWin = false;
     int winner= 0;
     while (joueur2.nbPion <= p-1){
@@ -1706,8 +1705,8 @@ void IA2() {
     struct Pion pions[2][p];
 
     //Creation des joueurs
-    struct Joueur joueur1 = (struct Joueur) {1, 1, 0, 0, 'X', 12, 0, 0, false};
-    struct Joueur joueur2 = (struct Joueur) {2, 2, 0, 0, 'O', 2, 0, 0, false};
+    struct Joueur joueur1 = (struct Joueur) {1, 1,  0, 'X', 12, 0, 0, false};
+    struct Joueur joueur2 = (struct Joueur) {2, 2,  0, 'O', 2, 0, 0, false};
     bool hasWin = false;
     int winner = 0;
     //Placement des pions du joueur 1 et intelligence artificielle pour un placement automatique des pions du joueur 2
