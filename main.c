@@ -1451,6 +1451,7 @@ void restartGame() {
         //Placement des pions du joueur 1 et intelligence artificielle pour un placement automatique des pions du joueur 2
         while (joueur2.nbPion <= maxPawns - 1) {
             hasWin = placePion2(boardSize, maxPawns, plateau, &joueur1, pions, winPawns);
+
             if (hasWin == false) {
                 hasWin = placePionIA2(boardSize, maxPawns, &joueur2, plateau, pions,winPawns);
                 if (hasWin) {
@@ -1504,6 +1505,8 @@ void restartGame() {
 
             hasWin = placePion2(boardSize, maxPawns,plateau,&joueur1,pions,winPawns);
             if (hasWin == false){
+                Sleep(250);
+
                 hasWin = placePion2(boardSize, maxPawns,plateau,&joueur2,pions,winPawns);
                 if (hasWin){
                     winner = 2;
@@ -1640,6 +1643,7 @@ void MultiJoueur2(){
     while (joueur2.nbPion <= p-1){
         hasWin = placePion2(n,p,plateau,&joueur1,pions,x);
         if (hasWin == false){
+            Sleep(250);
             hasWin = placePion2(n,p,plateau,&joueur2,pions,x);
             if (hasWin){
                 winner = 2;
