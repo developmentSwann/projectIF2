@@ -6,6 +6,12 @@
 #include <unistd.h>
 #include <time.h>
 
+void textColor(int couleurDuTexte,int couleurDeFond)
+{
+    HANDLE H=GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(H,couleurDeFond*16+couleurDuTexte);
+}
+
 void clearScreen()
 {
     system("cls");
@@ -43,11 +49,7 @@ struct Joueur {
     int posY;
     bool hasPlacedInZero;
 };
-void textColor(int couleurDuTexte,int couleurDeFond)
-{
-    HANDLE H=GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(H,couleurDeFond*16+couleurDuTexte);
-}
+
 
 
 void affichagePlateau(int n,int p,struct Case plateau[n][n],struct Joueur *joueur, int selecType){
@@ -94,7 +96,7 @@ void affichagePlateau(int n,int p,struct Case plateau[n][n],struct Joueur *joueu
     }
 
     printf("\n\n");
-    printf("---------------------");
+    printf("---------------------\n");
     printf("Informations du joueur :\n");
     printf("Equipe : %d\n",joueur->equipe);
     printf("Pions places : %d\n",joueur->nbPion);
@@ -146,10 +148,10 @@ void saveGame(int n,int p, int x,struct Joueur joueur1, struct Joueur joueur2, s
             for (j = 0; j < n; j++){
                 if (plateau[i][j].isEmpty == false){
 
-                    fprintf(fichier, "%d ,Pion %d, equipe %d - X: %d - Y: %d  - Voisins : N: %d - E: %d - S: %d - O: %d - NE: %d - SE: %d - SO: %d - NO: %d \n",plateau[i][j].isEmpty , plateau[i][j].pion->id, plateau[i][j].pion->equipe->equipe, plateau[i][j].posX, plateau[i][j].posY, plateau[i][j].voisinN, plateau[i][j].voisinE, plateau[i][j].voisinS, plateau[i][j].voisinO, plateau[i][j].voisinNE, plateau[i][j].voisinSE, plateau[i][j].voisinSO, plateau[i][j].voisinNO);
+                    fprintf(fichier, "%d ,Pion %d, equipe %d - X: %d - Y: %d  - Voisins : N: %d - E: %d - S: %d - O: %d - NE: %d - SE: %d - SO: %d - NO: %d \n",plateau[i][j].isEmpty , plateau[i][j].pion->id, plateau[i][j].pion->equipe->equipe, plateau[i][j].posX-1, plateau[i][j].posY-1, plateau[i][j].voisinN, plateau[i][j].voisinE, plateau[i][j].voisinS, plateau[i][j].voisinO, plateau[i][j].voisinNE, plateau[i][j].voisinSE, plateau[i][j].voisinSO, plateau[i][j].voisinNO);
                 }else{
 
-                    fprintf(fichier, "%d ,Case vide - X: %d - Y: %d - Voisins : N: %d - E: %d - S: %d - O: %d - NE: %d - SE: %d - SO: %d - NO: %d \n",plateau[i][j].isEmpty , plateau[i][j].posX, plateau[i][j].posY, plateau[i][j].voisinN, plateau[i][j].voisinE, plateau[i][j].voisinS, plateau[i][j].voisinO, plateau[i][j].voisinNE, plateau[i][j].voisinSE, plateau[i][j].voisinSO, plateau[i][j].voisinNO);
+                    fprintf(fichier, "%d ,Case vide - X: %d - Y: %d - Voisins : N: %d - E: %d - S: %d - O: %d - NE: %d - SE: %d - SO: %d - NO: %d \n",plateau[i][j].isEmpty , plateau[i][j].posX-1, plateau[i][j].posY-1, plateau[i][j].voisinN, plateau[i][j].voisinE, plateau[i][j].voisinS, plateau[i][j].voisinO, plateau[i][j].voisinNE, plateau[i][j].voisinSE, plateau[i][j].voisinSO, plateau[i][j].voisinNO);
                 }
             }
         }
@@ -220,7 +222,6 @@ void choixSave(int choix){
 // Detection grâce aux fleches directionnelles et entree
 void shouldSave(int n,int p, int x, struct Case plateau[n][n], struct Joueur *joueur1, struct Joueur *joueur2, struct Pion pions[2][p],int gameStatut){
     int choix = 0;
-    Sleep(1000);
     clearScreen();
     printf("Voulez-vous sauvegarder la partie ?\n");
     choixSave(choix);
@@ -540,11 +541,9 @@ bool placePion2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,str
     printf("-> Joueur %d, placez votre pion\n", joueur->equipe);
     CaseSelector2(n,p, x,plateau, joueur, pions,&posX, &posY,0);
     hasWin = scorePoint2(n,x,plateau,plateau[posY][posX],posX,posY);
-    {if (hasWin == true) {
-            printf("\nLe joueur %d a gagne", joueur->equipe);
-        }
+
         return hasWin;
-    }
+
 }
 
 bool movePion2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,struct Pion pions[2][p],int x){
@@ -563,11 +562,9 @@ bool movePion2(int n,int p,struct Case plateau[n][n], struct Joueur *joueur,stru
     printf("-> Joueur %d, deplacez votre pion\n", joueur->equipe);
     CaseSelector2(n,p,x, plateau, joueur, pions,&posX, &posY,2);
     hasWin = scorePoint2(n,x,plateau,plateau[posY][posX],posX,posY);
-    {if (hasWin == true) {
-            printf("\nLe joueur %d a gagne", joueur->equipe);
-        }
+
         return hasWin;
-    }
+
 }
 
 
@@ -1038,6 +1035,7 @@ bool placePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n],
         }
     }
     affichagePlateau(n,p, plateau,joueur,0);
+    Sleep(1000);
     return hasWin;
 
 
@@ -1047,8 +1045,6 @@ bool placePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n],
 //Fonction "movePionIA" qui permet de deplacer un pion du joueur 2 (intelligence artificielle) de maniere a bloquer le joueur 1 si il est sur le point de gagner ou de deplacer un pion du robot si il est sur le point de gagner
 //De même que pour la fonction "placePionIA", on va evaluer les cases du plateau de jeu et on va deplacer le pion sur la case qui a la plus grande valeur
 //Ici, on procede a une double evaluation, car il faut aussi evaluer le meilleur pion a deplacer.  Pour cela on analyse si il ne s'agit pas d'une case qui permet deja de bloquer le joueur 1 ou de gagner le jeu pour le joueur 2
-
-
 bool movePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n], struct Pion pions[2][p], int x) {
     //D'abord on evalue le pion a deplacer
     int i, j, k, l;
@@ -1242,122 +1238,22 @@ bool movePionIA2(int n,int p, struct Joueur *joueur, struct Case plateau[n][n], 
 }
 
 
-//Fonction "restartGame" qui permet de lancer la derniere partie sauvegardee dans le fichier save.txt
-//On restaure les parametres du plateau, et des joueurs a partir du contenu du fichier save.txt
-//Exemple de sauvegarde :
-//
-//
-//Date et heure de la partie : 27/12/2022 14:2:14
-//Statut de la partie : AI
-//Informations du plateau :
-//Longueur du plateau : 10
-//Nombre de pions a aligner : 4
-//Positions des pions :
-//0 ,Pion 0, equipe 1 - X: 1 - Y: 1  - Voisins : N: 0 - E: 2 - S: 11 - O: 0 - NE: 0 - SE: 12 - SO: 0 - NO: 0
-//0 ,Pion 0, equipe 2 - X: 2 - Y: 1  - Voisins : N: 0 - E: 3 - S: 12 - O: 1 - NE: 0 - SE: 13 - SO: 11 - NO: 0
-//1 ,Case vide - X: 3 - Y: 1 - Voisins : N: 0 - E: 4 - S: 13 - O: 2 - NE: 0 - SE: 14 - SO: 12 - NO: 0
-//1 ,Case vide - X: 4 - Y: 1 - Voisins : N: 0 - E: 5 - S: 14 - O: 3 - NE: 0 - SE: 15 - SO: 13 - NO: 0
-//1 ,Case vide - X: 5 - Y: 1 - Voisins : N: 0 - E: 6 - S: 15 - O: 4 - NE: 0 - SE: 16 - SO: 14 - NO: 0
-//1 ,Case vide - X: 6 - Y: 1 - Voisins : N: 0 - E: 7 - S: 16 - O: 5 - NE: 0 - SE: 17 - SO: 15 - NO: 0
-//1 ,Case vide - X: 7 - Y: 1 - Voisins : N: 0 - E: 8 - S: 17 - O: 6 - NE: 0 - SE: 18 - SO: 16 - NO: 0
-//1 ,Case vide - X: 8 - Y: 1 - Voisins : N: 0 - E: 9 - S: 18 - O: 7 - NE: 0 - SE: 19 - SO: 17 - NO: 0
-//1 ,Case vide - X: 9 - Y: 1 - Voisins : N: 0 - E: 10 - S: 19 - O: 8 - NE: 0 - SE: 20 - SO: 18 - NO: 0
-//1 ,Case vide - X: 10 - Y: 1 - Voisins : N: 0 - E: 0 - S: 20 - O: 9 - NE: 0 - SE: 0 - SO: 19 - NO: 0
-//1 ,Case vide - X: 1 - Y: 2 - Voisins : N: 1 - E: 12 - S: 21 - O: 0 - NE: 2 - SE: 22 - SO: 0 - NO: 0
-//1 ,Case vide - X: 2 - Y: 2 - Voisins : N: 2 - E: 13 - S: 22 - O: 11 - NE: 3 - SE: 23 - SO: 21 - NO: 1
-//1 ,Case vide - X: 3 - Y: 2 - Voisins : N: 3 - E: 14 - S: 23 - O: 12 - NE: 4 - SE: 24 - SO: 22 - NO: 2
-//1 ,Case vide - X: 4 - Y: 2 - Voisins : N: 4 - E: 15 - S: 24 - O: 13 - NE: 5 - SE: 25 - SO: 23 - NO: 3
-//1 ,Case vide - X: 5 - Y: 2 - Voisins : N: 5 - E: 16 - S: 25 - O: 14 - NE: 6 - SE: 26 - SO: 24 - NO: 4
-//1 ,Case vide - X: 6 - Y: 2 - Voisins : N: 6 - E: 17 - S: 26 - O: 15 - NE: 7 - SE: 27 - SO: 25 - NO: 5
-//1 ,Case vide - X: 7 - Y: 2 - Voisins : N: 7 - E: 18 - S: 27 - O: 16 - NE: 8 - SE: 28 - SO: 26 - NO: 6
-//1 ,Case vide - X: 8 - Y: 2 - Voisins : N: 8 - E: 19 - S: 28 - O: 17 - NE: 9 - SE: 29 - SO: 27 - NO: 7
-//1 ,Case vide - X: 9 - Y: 2 - Voisins : N: 9 - E: 20 - S: 29 - O: 18 - NE: 10 - SE: 30 - SO: 28 - NO: 8
-//1 ,Case vide - X: 10 - Y: 2 - Voisins : N: 10 - E: 0 - S: 30 - O: 19 - NE: 0 - SE: 0 - SO: 29 - NO: 9
-//1 ,Case vide - X: 1 - Y: 3 - Voisins : N: 11 - E: 22 - S: 31 - O: 0 - NE: 12 - SE: 32 - SO: 0 - NO: 0
-//1 ,Case vide - X: 2 - Y: 3 - Voisins : N: 12 - E: 23 - S: 32 - O: 21 - NE: 13 - SE: 33 - SO: 31 - NO: 11
-//1 ,Case vide - X: 3 - Y: 3 - Voisins : N: 13 - E: 24 - S: 33 - O: 22 - NE: 14 - SE: 34 - SO: 32 - NO: 12
-//1 ,Case vide - X: 4 - Y: 3 - Voisins : N: 14 - E: 25 - S: 34 - O: 23 - NE: 15 - SE: 35 - SO: 33 - NO: 13
-//1 ,Case vide - X: 5 - Y: 3 - Voisins : N: 15 - E: 26 - S: 35 - O: 24 - NE: 16 - SE: 36 - SO: 34 - NO: 14
-//1 ,Case vide - X: 6 - Y: 3 - Voisins : N: 16 - E: 27 - S: 36 - O: 25 - NE: 17 - SE: 37 - SO: 35 - NO: 15
-//1 ,Case vide - X: 7 - Y: 3 - Voisins : N: 17 - E: 28 - S: 37 - O: 26 - NE: 18 - SE: 38 - SO: 36 - NO: 16
-//1 ,Case vide - X: 8 - Y: 3 - Voisins : N: 18 - E: 29 - S: 38 - O: 27 - NE: 19 - SE: 39 - SO: 37 - NO: 17
-//1 ,Case vide - X: 9 - Y: 3 - Voisins : N: 19 - E: 30 - S: 39 - O: 28 - NE: 20 - SE: 40 - SO: 38 - NO: 18
-//1 ,Case vide - X: 10 - Y: 3 - Voisins : N: 20 - E: 0 - S: 40 - O: 29 - NE: 0 - SE: 0 - SO: 39 - NO: 19
-//1 ,Case vide - X: 1 - Y: 4 - Voisins : N: 21 - E: 32 - S: 41 - O: 0 - NE: 22 - SE: 42 - SO: 0 - NO: 0
-//1 ,Case vide - X: 2 - Y: 4 - Voisins : N: 22 - E: 33 - S: 42 - O: 31 - NE: 23 - SE: 43 - SO: 41 - NO: 21
-//1 ,Case vide - X: 3 - Y: 4 - Voisins : N: 23 - E: 34 - S: 43 - O: 32 - NE: 24 - SE: 44 - SO: 42 - NO: 22
-//1 ,Case vide - X: 4 - Y: 4 - Voisins : N: 24 - E: 35 - S: 44 - O: 33 - NE: 25 - SE: 45 - SO: 43 - NO: 23
-//1 ,Case vide - X: 5 - Y: 4 - Voisins : N: 25 - E: 36 - S: 45 - O: 34 - NE: 26 - SE: 46 - SO: 44 - NO: 24
-//1 ,Case vide - X: 6 - Y: 4 - Voisins : N: 26 - E: 37 - S: 46 - O: 35 - NE: 27 - SE: 47 - SO: 45 - NO: 25
-//1 ,Case vide - X: 7 - Y: 4 - Voisins : N: 27 - E: 38 - S: 47 - O: 36 - NE: 28 - SE: 48 - SO: 46 - NO: 26
-//1 ,Case vide - X: 8 - Y: 4 - Voisins : N: 28 - E: 39 - S: 48 - O: 37 - NE: 29 - SE: 49 - SO: 47 - NO: 27
-//1 ,Case vide - X: 9 - Y: 4 - Voisins : N: 29 - E: 40 - S: 49 - O: 38 - NE: 30 - SE: 50 - SO: 48 - NO: 28
-//1 ,Case vide - X: 10 - Y: 4 - Voisins : N: 30 - E: 0 - S: 50 - O: 39 - NE: 0 - SE: 0 - SO: 49 - NO: 29
-//1 ,Case vide - X: 1 - Y: 5 - Voisins : N: 31 - E: 42 - S: 51 - O: 0 - NE: 32 - SE: 52 - SO: 0 - NO: 0
-//1 ,Case vide - X: 2 - Y: 5 - Voisins : N: 32 - E: 43 - S: 52 - O: 41 - NE: 33 - SE: 53 - SO: 51 - NO: 31
-//1 ,Case vide - X: 3 - Y: 5 - Voisins : N: 33 - E: 44 - S: 53 - O: 42 - NE: 34 - SE: 54 - SO: 52 - NO: 32
-//1 ,Case vide - X: 4 - Y: 5 - Voisins : N: 34 - E: 45 - S: 54 - O: 43 - NE: 35 - SE: 55 - SO: 53 - NO: 33
-//1 ,Case vide - X: 5 - Y: 5 - Voisins : N: 35 - E: 46 - S: 55 - O: 44 - NE: 36 - SE: 56 - SO: 54 - NO: 34
-//1 ,Case vide - X: 6 - Y: 5 - Voisins : N: 36 - E: 47 - S: 56 - O: 45 - NE: 37 - SE: 57 - SO: 55 - NO: 35
-//1 ,Case vide - X: 7 - Y: 5 - Voisins : N: 37 - E: 48 - S: 57 - O: 46 - NE: 38 - SE: 58 - SO: 56 - NO: 36
-//1 ,Case vide - X: 8 - Y: 5 - Voisins : N: 38 - E: 49 - S: 58 - O: 47 - NE: 39 - SE: 59 - SO: 57 - NO: 37
-//1 ,Case vide - X: 9 - Y: 5 - Voisins : N: 39 - E: 50 - S: 59 - O: 48 - NE: 40 - SE: 60 - SO: 58 - NO: 38
-//1 ,Case vide - X: 10 - Y: 5 - Voisins : N: 40 - E: 0 - S: 60 - O: 49 - NE: 0 - SE: 0 - SO: 59 - NO: 39
-//1 ,Case vide - X: 1 - Y: 6 - Voisins : N: 41 - E: 52 - S: 61 - O: 0 - NE: 42 - SE: 62 - SO: 0 - NO: 0
-//1 ,Case vide - X: 2 - Y: 6 - Voisins : N: 42 - E: 53 - S: 62 - O: 51 - NE: 43 - SE: 63 - SO: 61 - NO: 41
-//1 ,Case vide - X: 3 - Y: 6 - Voisins : N: 43 - E: 54 - S: 63 - O: 52 - NE: 44 - SE: 64 - SO: 62 - NO: 42
-//1 ,Case vide - X: 4 - Y: 6 - Voisins : N: 44 - E: 55 - S: 64 - O: 53 - NE: 45 - SE: 65 - SO: 63 - NO: 43
-//1 ,Case vide - X: 5 - Y: 6 - Voisins : N: 45 - E: 56 - S: 65 - O: 54 - NE: 46 - SE: 66 - SO: 64 - NO: 44
-//1 ,Case vide - X: 6 - Y: 6 - Voisins : N: 46 - E: 57 - S: 66 - O: 55 - NE: 47 - SE: 67 - SO: 65 - NO: 45
-//1 ,Case vide - X: 7 - Y: 6 - Voisins : N: 47 - E: 58 - S: 67 - O: 56 - NE: 48 - SE: 68 - SO: 66 - NO: 46
-//1 ,Case vide - X: 8 - Y: 6 - Voisins : N: 48 - E: 59 - S: 68 - O: 57 - NE: 49 - SE: 69 - SO: 67 - NO: 47
-//1 ,Case vide - X: 9 - Y: 6 - Voisins : N: 49 - E: 60 - S: 69 - O: 58 - NE: 50 - SE: 70 - SO: 68 - NO: 48
-//1 ,Case vide - X: 10 - Y: 6 - Voisins : N: 50 - E: 0 - S: 70 - O: 59 - NE: 0 - SE: 0 - SO: 69 - NO: 49
-//1 ,Case vide - X: 1 - Y: 7 - Voisins : N: 51 - E: 62 - S: 71 - O: 0 - NE: 52 - SE: 72 - SO: 0 - NO: 0
-//1 ,Case vide - X: 2 - Y: 7 - Voisins : N: 52 - E: 63 - S: 72 - O: 61 - NE: 53 - SE: 73 - SO: 71 - NO: 51
-//1 ,Case vide - X: 3 - Y: 7 - Voisins : N: 53 - E: 64 - S: 73 - O: 62 - NE: 54 - SE: 74 - SO: 72 - NO: 52
-//1 ,Case vide - X: 4 - Y: 7 - Voisins : N: 54 - E: 65 - S: 74 - O: 63 - NE: 55 - SE: 75 - SO: 73 - NO: 53
-//1 ,Case vide - X: 5 - Y: 7 - Voisins : N: 55 - E: 66 - S: 75 - O: 64 - NE: 56 - SE: 76 - SO: 74 - NO: 54
-//1 ,Case vide - X: 6 - Y: 7 - Voisins : N: 56 - E: 67 - S: 76 - O: 65 - NE: 57 - SE: 77 - SO: 75 - NO: 55
-//1 ,Case vide - X: 7 - Y: 7 - Voisins : N: 57 - E: 68 - S: 77 - O: 66 - NE: 58 - SE: 78 - SO: 76 - NO: 56
-//1 ,Case vide - X: 8 - Y: 7 - Voisins : N: 58 - E: 69 - S: 78 - O: 67 - NE: 59 - SE: 79 - SO: 77 - NO: 57
-//1 ,Case vide - X: 9 - Y: 7 - Voisins : N: 59 - E: 70 - S: 79 - O: 68 - NE: 60 - SE: 80 - SO: 78 - NO: 58
-//1 ,Case vide - X: 10 - Y: 7 - Voisins : N: 60 - E: 0 - S: 80 - O: 69 - NE: 0 - SE: 0 - SO: 79 - NO: 59
-//1 ,Case vide - X: 1 - Y: 8 - Voisins : N: 61 - E: 72 - S: 81 - O: 0 - NE: 62 - SE: 82 - SO: 0 - NO: 0
-//1 ,Case vide - X: 2 - Y: 8 - Voisins : N: 62 - E: 73 - S: 82 - O: 71 - NE: 63 - SE: 83 - SO: 81 - NO: 61
-//1 ,Case vide - X: 3 - Y: 8 - Voisins : N: 63 - E: 74 - S: 83 - O: 72 - NE: 64 - SE: 84 - SO: 82 - NO: 62
-//1 ,Case vide - X: 4 - Y: 8 - Voisins : N: 64 - E: 75 - S: 84 - O: 73 - NE: 65 - SE: 85 - SO: 83 - NO: 63
-//1 ,Case vide - X: 5 - Y: 8 - Voisins : N: 65 - E: 76 - S: 85 - O: 74 - NE: 66 - SE: 86 - SO: 84 - NO: 64
-//1 ,Case vide - X: 6 - Y: 8 - Voisins : N: 66 - E: 77 - S: 86 - O: 75 - NE: 67 - SE: 87 - SO: 85 - NO: 65
-//1 ,Case vide - X: 7 - Y: 8 - Voisins : N: 67 - E: 78 - S: 87 - O: 76 - NE: 68 - SE: 88 - SO: 86 - NO: 66
-//1 ,Case vide - X: 8 - Y: 8 - Voisins : N: 68 - E: 79 - S: 88 - O: 77 - NE: 69 - SE: 89 - SO: 87 - NO: 67
-//1 ,Case vide - X: 9 - Y: 8 - Voisins : N: 69 - E: 80 - S: 89 - O: 78 - NE: 70 - SE: 90 - SO: 88 - NO: 68
-//1 ,Case vide - X: 10 - Y: 8 - Voisins : N: 70 - E: 0 - S: 90 - O: 79 - NE: 0 - SE: 0 - SO: 89 - NO: 69
-//1 ,Case vide - X: 1 - Y: 9 - Voisins : N: 71 - E: 82 - S: 91 - O: 0 - NE: 72 - SE: 92 - SO: 0 - NO: 0
-//1 ,Case vide - X: 2 - Y: 9 - Voisins : N: 72 - E: 83 - S: 92 - O: 81 - NE: 73 - SE: 93 - SO: 91 - NO: 71
-//1 ,Case vide - X: 3 - Y: 9 - Voisins : N: 73 - E: 84 - S: 93 - O: 82 - NE: 74 - SE: 94 - SO: 92 - NO: 72
-//1 ,Case vide - X: 4 - Y: 9 - Voisins : N: 74 - E: 85 - S: 94 - O: 83 - NE: 75 - SE: 95 - SO: 93 - NO: 73
-//1 ,Case vide - X: 5 - Y: 9 - Voisins : N: 75 - E: 86 - S: 95 - O: 84 - NE: 76 - SE: 96 - SO: 94 - NO: 74
-//1 ,Case vide - X: 6 - Y: 9 - Voisins : N: 76 - E: 87 - S: 96 - O: 85 - NE: 77 - SE: 97 - SO: 95 - NO: 75
-//1 ,Case vide - X: 7 - Y: 9 - Voisins : N: 77 - E: 88 - S: 97 - O: 86 - NE: 78 - SE: 98 - SO: 96 - NO: 76
-//1 ,Case vide - X: 8 - Y: 9 - Voisins : N: 78 - E: 89 - S: 98 - O: 87 - NE: 79 - SE: 99 - SO: 97 - NO: 77
-//1 ,Case vide - X: 9 - Y: 9 - Voisins : N: 79 - E: 90 - S: 99 - O: 88 - NE: 80 - SE: 100 - SO: 98 - NO: 78
-//1 ,Case vide - X: 10 - Y: 9 - Voisins : N: 80 - E: 0 - S: 100 - O: 89 - NE: 0 - SE: 0 - SO: 99 - NO: 79
-//1 ,Case vide - X: 1 - Y: 10 - Voisins : N: 81 - E: 92 - S: 0 - O: 0 - NE: 82 - SE: 0 - SO: 0 - NO: 0
-//1 ,Case vide - X: 2 - Y: 10 - Voisins : N: 82 - E: 93 - S: 0 - O: 91 - NE: 83 - SE: 0 - SO: 0 - NO: 81
-//1 ,Case vide - X: 3 - Y: 10 - Voisins : N: 83 - E: 94 - S: 0 - O: 92 - NE: 84 - SE: 0 - SO: 0 - NO: 82
-//1 ,Case vide - X: 4 - Y: 10 - Voisins : N: 84 - E: 95 - S: 0 - O: 93 - NE: 85 - SE: 0 - SO: 0 - NO: 83
-//1 ,Case vide - X: 5 - Y: 10 - Voisins : N: 85 - E: 96 - S: 0 - O: 94 - NE: 86 - SE: 0 - SO: 0 - NO: 84
-//1 ,Case vide - X: 6 - Y: 10 - Voisins : N: 86 - E: 97 - S: 0 - O: 95 - NE: 87 - SE: 0 - SO: 0 - NO: 85
-//1 ,Case vide - X: 7 - Y: 10 - Voisins : N: 87 - E: 98 - S: 0 - O: 96 - NE: 88 - SE: 0 - SO: 0 - NO: 86
-//1 ,Case vide - X: 8 - Y: 10 - Voisins : N: 88 - E: 99 - S: 0 - O: 97 - NE: 89 - SE: 0 - SO: 0 - NO: 87
-//1 ,Case vide - X: 9 - Y: 10 - Voisins : N: 89 - E: 100 - S: 0 - O: 98 - NE: 90 - SE: 0 - SO: 0 - NO: 88
-//1 ,Case vide - X: 10 - Y: 10 - Voisins : N: 90 - E: 0 - S: 0 - O: 99 - NE: 0 - SE: 0 - SO: 0 - NO: 89
-//Informations du joueur 1 :
-//Nombre de pions : 1
-//Informations du joueur 2 :
-//Nombre de pions : 1
 
+
+void afficheWinner(struct Joueur *joueur){
+    //"Décoration" de victoire et affiche le gagnant
+    printf("\n");
+    printf("**********************************************\n");
+    printf("*                                            *\n");
+    printf("*          Felicitations joueur %d!          *\n", joueur->equipe);
+    printf("*                                            *\n");
+    printf("**********************************************\n");
+
+    sleep(15);  //On attend 15 secondes avant de revenir au menu principal
+
+
+
+}
 int compte()
 {
     FILE *fichier = fopen("save.txt", "r");
@@ -1380,6 +1276,8 @@ int compte()
 
     return nLignes;
 }
+//Fonction "restartGame" qui permet de lancer la derniere partie sauvegardee dans le fichier save.txt
+//On restaure les parametres du plateau, et des joueurs a partir du contenu du fichier save.txt
 void restartGame() {
     //On ouvre le fichier
     FILE *fichier = fopen("save.txt", "r");
@@ -1389,7 +1287,7 @@ void restartGame() {
     for (int i = 0; i < nbLigne; i++) {
         char ligne[100];
         fgets(ligne, 100, fichier);
-        //Si il s'agit de la 2eme ligne, on recupere le statut de la partie ("AI" "ou "Multi-joueur")
+        //Si il s'agit de la 4eme ligne, on recupere le statut de la partie ("AI" "ou "Multi-joueur")
         if(i == 3) {
             printf("%d - %s | ",i,ligne);
             if (ligne[22] == 'A') {
@@ -1399,7 +1297,7 @@ void restartGame() {
                 gameMode = 2;
             }
         }
-        //Si il s'agit de la 4eme ligne, on recupere la longueur du plateau
+        //Si il s'agit de la 6eme ligne, on recupere la longueur du plateau
         if (i == 5){
 
             //On recupere la longueur du plateau (a partir de la 23 eme lettre de la ligne), et on la convertit en int
@@ -1411,7 +1309,7 @@ void restartGame() {
                 j++;
             }
         }
-        //Si il s'agit de la 5eme ligne, on recupere le nombre de pions max par joueur
+        //Si il s'agit de la 7eme ligne, on recupere le nombre de pions max par joueur
         if (i == 6){
             printf("%d - %s",i,ligne);
 
@@ -1426,45 +1324,18 @@ void restartGame() {
             }
         }
         //Si
-        // il s'agit de la 6eme ligne, on recupere le nombre de pions a aligner pour gagner
+        // il s'agit de la 8eme ligne, on recupere le nombre de pions a aligner pour gagner
         if (i == 7){
             printf("%d - %s",i,ligne);
            // On recupere le nombre de pions a aligner pour gagner (a partir de la 29 eme lettre de la ligne), et on le convertit en int
-            winPawns = ligne[29] - '0';
+            winPawns = ligne[28] - '0';
             //On check si le nombre de pions max par joueur est superieur a 9
             int j = 1;
-            while (ligne[29 + j] != ' '){
+            while (ligne[28 + j] != ' '){
                 winPawns = winPawns * 10 + ligne[29 + j] - '0';
                 j++;
             }
-
         }
-//        //Si il s'agit de l'avant avant derniere ligne , on recupere le nombre de pions du joueur 1
-//        if (i == nbLigne - 3){
-//            //On recupere le nombre de pions du joueur 1 (a partir de la 19 eme lettre de la ligne), et on le convertit en int
-//            nbP1 = ligne[18] - '0';
-//            //On check si le nombre de pions du joueur 1 est superieur a 9
-//            int j = 1;
-//            while (ligne[18 + j] != ' '){
-//                nbP1 = nbP1 * 10 + ligne[18 + j] - '0';
-//                j++;
-//            }
-//            printf("Nombre de pions joueur 1 : %d",nbP1);
-//
-//        }
-//        //Si il s'agit de la derniere ligne , on recupere le nombre de pions du joueur 2
-//        if (i == nbLigne - 1){
-//            //On recupere le nombre de pions du joueur 2 (a partir de la 19 eme lettre de la ligne), et on le convertit en int
-//            nbP2 = ligne[18] - '0';
-//            //On check si le nombre de pions du joueur 2 est superieur a 9
-//            int j = 1;
-//            while (ligne[18 + j] != ' '){
-//                nbP2 = nbP2 * 10 + ligne[18 + j] - '0';
-//                j++;
-//            }
-//            printf("Nombre de pions joueur 2 : %d",nbP2);
-//
-//        }
     }
     //On ferme le fichier
     fclose(fichier);
@@ -1494,8 +1365,9 @@ void restartGame() {
                 // a partir 9eme lettre de la ligne = idPion
                 idPion = ligne[8] - '0';
                 int j = 1;
-                while (ligne[8 + j] != ' ') {
+                while (ligne[8 + j] != ',') {
                     idPion = idPion * 10 + ligne[8 + j] - '0';
+
                     j++;
                 }
                 // 19eme lettre de la ligne = idEquipe
@@ -1533,8 +1405,9 @@ void restartGame() {
 
             }
         }
+
     fclose(fichier2);
-    printf("Nombre de pions joueur 1 : %d",joueur1.nbPion);
+
     //On recommence le jeu
     if (gameMode == 1) {
         bool hasWin = false;
@@ -1543,7 +1416,7 @@ void restartGame() {
         while (joueur2.nbPion <= maxPawns - 1) {
             hasWin = placePion2(boardSize, maxPawns, plateau, &joueur1, pions, winPawns);
             if (hasWin == false) {
-                hasWin = placePionIA2(boardSize, maxPawns,winPawns, &joueur2, plateau, pions);
+                hasWin = placePionIA2(boardSize, maxPawns, &joueur2, plateau, pions,winPawns);
                 if (hasWin) {
                     winner = 2;
                     break;
@@ -1557,6 +1430,8 @@ void restartGame() {
         do {
             if (!hasWin) {
                 hasWin = movePion2(boardSize, maxPawns, plateau, &joueur1, pions, winPawns);
+                printf("%d,%d", hasWin,true);
+                Sleep(1000);
                 if (hasWin == false) {
                     hasWin = movePionIA2(boardSize, maxPawns, &joueur2, plateau, pions, winPawns);
                     if (hasWin) {
@@ -1571,13 +1446,18 @@ void restartGame() {
                 break;
             }
             shouldSave(boardSize, maxPawns, winPawns, plateau, &joueur1, &joueur2, pions, 0);
-        } while (hasWin == false);
+        } while (hasWin == false);{
+            if (winner == 1) {
+                afficheWinner(&joueur1);
 
-        printf("\n");
-        printf("---------------------");
-        printf("\n");
-        printf("-> Le joueur %d a gagne\n", winner);
-        sleep(15);
+            } else {
+                afficheWinner(&joueur2);
+
+            }
+            Sleep(15);
+        }
+
+
     }else{
         bool hasWin = false;
         int winner= 0;
@@ -1611,24 +1491,15 @@ void restartGame() {
             }
             shouldSave(boardSize, maxPawns,winPawns,plateau,&joueur1,&joueur2,pions,1);
         } while (hasWin == false);
-        printf("\n");
-        printf("---------------------");
-        printf("\n");
-        printf("-> Le joueur %d a gagne\n", winner);
+        if (winner == 1) {
+            afficheWinner(&joueur1);
+
+        } else {
+            afficheWinner(&joueur2);
+
+        }
         Sleep(15);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
@@ -1638,74 +1509,53 @@ void restartGame() {
 
 
 
-//        // On lit les informations des joueurs
-//        for (int i = 0; i < n; i++) {
-//            fscanf(save, "%d %d", &joueurs[i].nbPions, &joueurs[i].nbPionsRestants);
-//        }
-//
-//        // On lit les informations des pions
-//        for (int i = 0; i < p; i++) {
-//            fscanf(save, "%d %d %d", &pions[i].joueur, &pions[i].x, &pions[i].y);
-//        }
-//
-//        // On lit les informations du plateau
-//        for (int i = 0; i < N; i++) {
-//            for (int j = 0; j < N; j++) {
-//                fscanf(save, "%d", &plateau[i][j]);
-//            }
-//        }
+void AffichageMenu(int choix){
+    switch (choix){
+        case 1:
+            printf("[");
+            textColor(4,0);
+            printf("%c",(char) 219);
+            textColor(15,0);
+            printf("] Jouer contre l'ordinateur\n");
+            printf("[ ] Jouer contre un autre joueur\n");
+            printf("[ ] Charger une partie sauvegardee\n");
+            printf("[ ] Quitter le jeu\n");
+            break;
+        case 2:
+            printf("[ ] Jouer contre l'ordinateur\n");
+            printf("[");
+            textColor(4,0);
+            printf("%c",(char) 219);
+            textColor(15,0);
+            printf("] Jouer contre un autre joueur\n");
+            printf("[ ] Charger une partie sauvegardee\n");
+            printf("[ ] Quitter le jeu\n");
+            break;
+        case 3:
+            printf("[ ] Jouer contre l'ordinateur\n");
+            printf("[ ] Jouer contre un autre joueur\n");
+            printf("[");
+            textColor(4,0);
+            printf("%c",(char) 219);
+            textColor(15,0);
+            printf("] Charger une partie sauvegardee\n");
+            printf("[ ] Quitter le jeu\n");
+            break;
+        case 4:
+            printf("[ ] Jouer contre l'ordinateur\n");
+            printf("[ ] Jouer contre un autre joueur\n");
+            printf("[ ] Charger une partie sauvegardee\n");
+            printf("[");
+            textColor(4,0);
+            printf("%c",(char) 219);
+            textColor(15,0);
+            printf("] Quitter le jeu\n");
+            break;
+        default:
 
-
-
-
-
-//        //On lance la partie
-//        if (gameStatut == 0){
-//            bool hasWin = false;
-//            int winner = 0;
-//            //Placement des pions du joueur 1 et intelligence artificielle pour un placement automatique des pions du joueur 2
-//            while (joueur2->nbPion <= p - 1) {
-//                hasWin = placePion2(n, p,  plateau, &joueur1,pions,x);
-//                if (hasWin == false) {
-//                    hasWin = placePionIA2(n, p, &joueur2, plateau, pions, x);
-//                    if (hasWin) {
-//                        winner = 2;
-//                        break;
-//                    }
-//
-//                } else {
-//                    winner = 1;
-//                    break;
-//                }
-//            }
-//            do {
-//                if (!hasWin){
-//                    hasWin = movePion2(n,p,plateau,&joueur1,pions,x);
-//                    if (hasWin == false){
-//                        hasWin = movePionIA2(n,p,&joueur2,plateau,pions,x);
-//                        if (hasWin){
-//                            winner = 2;
-//                            break;
-//                        }
-//                    }else{
-//                        winner = 1;
-//                        break;
-//                    }
-//                }else {
-//                    break;
-//                }
-//            } while (hasWin == false);
-//
-//            printf("\n");
-//            printf("---------------------");
-//            printf("\n");
-//            printf("-> Le joueur %d a gagne\n", winner);
-//            sleep(15);
-//        }else{
-//
-
-//        }
-
+            break;
+    }
+}
 
 void MultiJoueur2(){
     int n,p, i,j;
@@ -1732,6 +1582,7 @@ void MultiJoueur2(){
 
     //Creation des joueurs
     struct Joueur joueur1 = (struct Joueur){1,1,0,0,'X',12, 0,0,false};
+
     struct Joueur joueur2 = (struct Joueur){2,2,0,0,'O',2,0,0,false};
     bool hasWin = false;
     int winner= 0;
@@ -1765,11 +1616,15 @@ void MultiJoueur2(){
         }
         shouldSave(n,p,x,plateau,&joueur1,&joueur2,pions,1);
     } while (hasWin == false);
-    printf("\n");
-    printf("---------------------");
-    printf("\n");
-    printf("-> Le joueur %d a gagne\n", winner);
-    Sleep(15);
+    if (winner == 1) {
+        afficheWinner(&joueur1);
+
+    } else {
+        afficheWinner(&joueur2);
+
+    }
+    Sleep(5000);
+
 }
 
 
@@ -1833,48 +1688,16 @@ void IA2() {
         }
         shouldSave(n,p,x,plateau,&joueur1,&joueur2,pions,0);
     } while (hasWin == false);
+    if (winner == 1) {
+        afficheWinner(&joueur1);
 
-    printf("\n");
-    printf("---------------------");
-    printf("\n");
-    printf("-> Le joueur %d a gagne\n", winner);
-    sleep(15);
-}
+    } else {
+        afficheWinner(&joueur2);
 
-
-void AffichageMenu(int choix){
-    switch (choix){
-        case 1:
-            printf("[");
-            textColor(4,0);
-            printf("%c",(char) 219);
-            textColor(15,0);
-            printf("] Jouer contre l'ordinateur\n");
-            printf("[ ] Jouer contre un autre joueur\n");
-            printf("[ ] Charger une partie sauvegardee\n");
-            break;
-        case 2:
-            printf("[ ] Jouer contre l'ordinateur\n");
-            printf("[");
-            textColor(4,0);
-            printf("%c",(char) 219);
-            textColor(15,0);
-            printf("] Jouer contre un autre joueur\n");
-            printf("[ ] Charger une partie sauvegardee\n");
-            break;
-        case 3:
-            printf("[ ] Jouer contre l'ordinateur\n");
-            printf("[ ] Jouer contre un autre joueur\n");
-            printf("[");
-            textColor(4,0);
-            printf("%c",(char) 219);
-            textColor(15,0);
-            printf("] Charger une partie sauvegardee\n");
-            break;
-        default:
-
-            break;
     }
+    Sleep(5000);
+
+
 }
 
 
@@ -1894,9 +1717,9 @@ void menu(){
         if (GetAsyncKeyState(VK_UP) != 0){
             choix --;
             if (choix < 1){
-                choix = 3;
+                choix = 4;
             }
-            clearScreen();
+            system("cls");
             printf("-> Bienvenue dans le jeu du Teeko\n");
             printf("-> Veuillez choisir une option\n");
             AffichageMenu(choix);
@@ -1906,10 +1729,10 @@ void menu(){
         }
         if (GetAsyncKeyState(VK_DOWN) != 0){
             choix  ++;
-            if (choix > 3){
+            if (choix > 4){
                 choix = 1;
             }
-            clearScreen();
+            system("cls");
             printf("-> Bienvenue dans le jeu du Teeko\n");
             printf("-> Veuillez choisir une option\n");
             AffichageMenu(choix);
@@ -1920,7 +1743,7 @@ void menu(){
         if (GetAsyncKeyState(VK_RETURN) != 0){
             printf("-> Vous avez choisi l'option %d\n", choix);
             Sleep(250);
-            clearScreen();
+            system("cls");
             hasSelected = true;
         }
 
@@ -1938,19 +1761,26 @@ void menu(){
         case 3:
             restartGame();
             break;
+        case 4:
+            exit(0);
+            break;
         default:
             break;
     }
 }
-
-
-
 int main()
 {
     menu();
     return 0;
 
 }
+
+
+
+
+
+
+
 
 
 

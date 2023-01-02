@@ -1,14 +1,14 @@
 
 
-Date et heure de la partie : 29/12/2022 19:55:16 
+Date et heure de la partie : 2/1/2023 13:1:40 
 Statut de la partie : AI 
 Informations du plateau : 
 Longueur du plateau : 10 
 Nombre de pions par joueur : 4 
-Nombre de pions à aligner : 4 
+Nombre de pions a aligner : 4 
 Positions des pions : 
 0 ,Pion 0, equipe 2 - X: 0 - Y: 0  - Voisins : N: 0 - E: 2 - S: 11 - O: 0 - NE: 0 - SE: 12 - SO: 0 - NO: 0 
-1 ,Case vide - X: 1 - Y: 0 - Voisins : N: 0 - E: 3 - S: 12 - O: 1 - NE: 0 - SE: 13 - SO: 11 - NO: 0 
+0 ,Pion 1, equipe 1 - X: 1 - Y: 0  - Voisins : N: 0 - E: 3 - S: 12 - O: 1 - NE: 0 - SE: 13 - SO: 11 - NO: 0 
 1 ,Case vide - X: 2 - Y: 0 - Voisins : N: 0 - E: 4 - S: 13 - O: 2 - NE: 0 - SE: 14 - SO: 12 - NO: 0 
 1 ,Case vide - X: 3 - Y: 0 - Voisins : N: 0 - E: 5 - S: 14 - O: 3 - NE: 0 - SE: 15 - SO: 13 - NO: 0 
 1 ,Case vide - X: 4 - Y: 0 - Voisins : N: 0 - E: 6 - S: 15 - O: 4 - NE: 0 - SE: 16 - SO: 14 - NO: 0 
@@ -17,20 +17,20 @@ Positions des pions :
 1 ,Case vide - X: 7 - Y: 0 - Voisins : N: 0 - E: 9 - S: 18 - O: 7 - NE: 0 - SE: 19 - SO: 17 - NO: 0 
 1 ,Case vide - X: 8 - Y: 0 - Voisins : N: 0 - E: 10 - S: 19 - O: 8 - NE: 0 - SE: 20 - SO: 18 - NO: 0 
 1 ,Case vide - X: 9 - Y: 0 - Voisins : N: 0 - E: 0 - S: 20 - O: 9 - NE: 0 - SE: 0 - SO: 19 - NO: 0 
-1 ,Case vide - X: 0 - Y: 1 - Voisins : N: 1 - E: 12 - S: 21 - O: 0 - NE: 2 - SE: 22 - SO: 0 - NO: 0 
+0 ,Pion 2, equipe 2 - X: 0 - Y: 1  - Voisins : N: 1 - E: 12 - S: 21 - O: 0 - NE: 2 - SE: 22 - SO: 0 - NO: 0 
 0 ,Pion 0, equipe 1 - X: 1 - Y: 1  - Voisins : N: 2 - E: 13 - S: 22 - O: 11 - NE: 3 - SE: 23 - SO: 21 - NO: 1 
 1 ,Case vide - X: 2 - Y: 1 - Voisins : N: 3 - E: 14 - S: 23 - O: 12 - NE: 4 - SE: 24 - SO: 22 - NO: 2 
 1 ,Case vide - X: 3 - Y: 1 - Voisins : N: 4 - E: 15 - S: 24 - O: 13 - NE: 5 - SE: 25 - SO: 23 - NO: 3 
-1 ,Case vide - X: 4 - Y: 1 - Voisins : N: 5 - E: 16 - S: 25 - O: 14 - NE: 6 - SE: 26 - SO: 24 - NO: 4 
+0 ,Pion 3, equipe 1 - X: 4 - Y: 1  - Voisins : N: 5 - E: 16 - S: 25 - O: 14 - NE: 6 - SE: 26 - SO: 24 - NO: 4 
 1 ,Case vide - X: 5 - Y: 1 - Voisins : N: 6 - E: 17 - S: 26 - O: 15 - NE: 7 - SE: 27 - SO: 25 - NO: 5 
 1 ,Case vide - X: 6 - Y: 1 - Voisins : N: 7 - E: 18 - S: 27 - O: 16 - NE: 8 - SE: 28 - SO: 26 - NO: 6 
 1 ,Case vide - X: 7 - Y: 1 - Voisins : N: 8 - E: 19 - S: 28 - O: 17 - NE: 9 - SE: 29 - SO: 27 - NO: 7 
 1 ,Case vide - X: 8 - Y: 1 - Voisins : N: 9 - E: 20 - S: 29 - O: 18 - NE: 10 - SE: 30 - SO: 28 - NO: 8 
 1 ,Case vide - X: 9 - Y: 1 - Voisins : N: 10 - E: 0 - S: 30 - O: 19 - NE: 0 - SE: 0 - SO: 29 - NO: 9 
 1 ,Case vide - X: 0 - Y: 2 - Voisins : N: 11 - E: 22 - S: 31 - O: 0 - NE: 12 - SE: 32 - SO: 0 - NO: 0 
-1 ,Case vide - X: 1 - Y: 2 - Voisins : N: 12 - E: 23 - S: 32 - O: 21 - NE: 13 - SE: 33 - SO: 31 - NO: 11 
+0 ,Pion 1, equipe 2 - X: 1 - Y: 2  - Voisins : N: 12 - E: 23 - S: 32 - O: 21 - NE: 13 - SE: 33 - SO: 31 - NO: 11 
 1 ,Case vide - X: 2 - Y: 2 - Voisins : N: 13 - E: 24 - S: 33 - O: 22 - NE: 14 - SE: 34 - SO: 32 - NO: 12 
-1 ,Case vide - X: 3 - Y: 2 - Voisins : N: 14 - E: 25 - S: 34 - O: 23 - NE: 15 - SE: 35 - SO: 33 - NO: 13 
+0 ,Pion 2, equipe 1 - X: 3 - Y: 2  - Voisins : N: 14 - E: 25 - S: 34 - O: 23 - NE: 15 - SE: 35 - SO: 33 - NO: 13 
 1 ,Case vide - X: 4 - Y: 2 - Voisins : N: 15 - E: 26 - S: 35 - O: 24 - NE: 16 - SE: 36 - SO: 34 - NO: 14 
 1 ,Case vide - X: 5 - Y: 2 - Voisins : N: 16 - E: 27 - S: 36 - O: 25 - NE: 17 - SE: 37 - SO: 35 - NO: 15 
 1 ,Case vide - X: 6 - Y: 2 - Voisins : N: 17 - E: 28 - S: 37 - O: 26 - NE: 18 - SE: 38 - SO: 36 - NO: 16 
@@ -39,7 +39,7 @@ Positions des pions :
 1 ,Case vide - X: 9 - Y: 2 - Voisins : N: 20 - E: 0 - S: 40 - O: 29 - NE: 0 - SE: 0 - SO: 39 - NO: 19 
 1 ,Case vide - X: 0 - Y: 3 - Voisins : N: 21 - E: 32 - S: 41 - O: 0 - NE: 22 - SE: 42 - SO: 0 - NO: 0 
 1 ,Case vide - X: 1 - Y: 3 - Voisins : N: 22 - E: 33 - S: 42 - O: 31 - NE: 23 - SE: 43 - SO: 41 - NO: 21 
-1 ,Case vide - X: 2 - Y: 3 - Voisins : N: 23 - E: 34 - S: 43 - O: 32 - NE: 24 - SE: 44 - SO: 42 - NO: 22 
+0 ,Pion 3, equipe 2 - X: 2 - Y: 3  - Voisins : N: 23 - E: 34 - S: 43 - O: 32 - NE: 24 - SE: 44 - SO: 42 - NO: 22 
 1 ,Case vide - X: 3 - Y: 3 - Voisins : N: 24 - E: 35 - S: 44 - O: 33 - NE: 25 - SE: 45 - SO: 43 - NO: 23 
 1 ,Case vide - X: 4 - Y: 3 - Voisins : N: 25 - E: 36 - S: 45 - O: 34 - NE: 26 - SE: 46 - SO: 44 - NO: 24 
 1 ,Case vide - X: 5 - Y: 3 - Voisins : N: 26 - E: 37 - S: 46 - O: 35 - NE: 27 - SE: 47 - SO: 45 - NO: 25 
@@ -108,6 +108,6 @@ Positions des pions :
 1 ,Case vide - X: 8 - Y: 9 - Voisins : N: 89 - E: 100 - S: 0 - O: 98 - NE: 90 - SE: 0 - SO: 0 - NO: 88 
 1 ,Case vide - X: 9 - Y: 9 - Voisins : N: 90 - E: 0 - S: 0 - O: 99 - NE: 0 - SE: 0 - SO: 0 - NO: 89 
 Informations du joueur 1 : 
-Nombre de pions : 1 
+Nombre de pions : 4 
 Informations du joueur 2 : 
-Nombre de pions : 1 
+Nombre de pions : 4 

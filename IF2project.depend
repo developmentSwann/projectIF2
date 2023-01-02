@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1672661002 source:c:\users\swann\onedrive\bureau\if2project\main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<windows.h>
+	<conio.h>
+	<unistd.h>
+	<time.h>
+
