@@ -530,6 +530,7 @@ void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *j
                         joueur->nbPion++;
                         clearScreen();
                         Sleep(250);
+                        pressedScore = 0;
                         hasSelected = true;
                     }
                     //Si on veut sélectionenr le pion à déplacer
@@ -538,6 +539,7 @@ void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *j
                         *posX = joueur->posX;
                         *posY = joueur->posY;
                         hasSelected = true;
+                        pressedScore = 0;
                     }
                     //Si on veut sélectionner la case de destination
                 }else{
@@ -555,13 +557,11 @@ void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *j
                             clearScreen();
                             affichagePlateau(n, p, plateau, joueur, 0, gamePhase);
                             hasSelected = true;
+                            pressedScore = 0;
                         }
-
-
-
                     }
                 }
-                pressedScore = 0;
+
             }
         }
     }
