@@ -1430,8 +1430,6 @@ void restartGame() {
         do {
             if (!hasWin) {
                 hasWin = movePion2(boardSize, maxPawns, plateau, &joueur1, pions, winPawns);
-                printf("%d,%d", hasWin,true);
-                Sleep(1000);
                 if (hasWin == false) {
                     hasWin = movePionIA2(boardSize, maxPawns, &joueur2, plateau, pions, winPawns);
                     if (hasWin) {
@@ -1454,7 +1452,7 @@ void restartGame() {
                 afficheWinner(&joueur2);
 
             }
-            Sleep(15);
+            Sleep(5000);
         }
 
 
