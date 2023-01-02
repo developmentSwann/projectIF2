@@ -529,6 +529,7 @@ void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *j
                         plateau[*posY][*posX].isEmpty = false;
                         joueur->nbPion++;
                         clearScreen();
+                        Sleep(250);
                         hasSelected = true;
                     }
                     //Si on veut sélectionenr le pion à déplacer
@@ -1505,7 +1506,6 @@ void restartGame() {
 
             hasWin = placePion2(boardSize, maxPawns,plateau,&joueur1,pions,winPawns);
             if (hasWin == false){
-                Sleep(250);
 
                 hasWin = placePion2(boardSize, maxPawns,plateau,&joueur2,pions,winPawns);
                 if (hasWin){
@@ -1643,7 +1643,6 @@ void MultiJoueur2(){
     while (joueur2.nbPion <= p-1){
         hasWin = placePion2(n,p,plateau,&joueur1,pions,x);
         if (hasWin == false){
-            Sleep(250);
             hasWin = placePion2(n,p,plateau,&joueur2,pions,x);
             if (hasWin){
                 winner = 2;
