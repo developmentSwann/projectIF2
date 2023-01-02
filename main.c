@@ -518,6 +518,7 @@ void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *j
         if (GetAsyncKeyState(VK_TAB)){
             pressedScore = pressedScore +1;
             if (pressedScore >= 1) {
+                //Si on veut placer le pion
                 if (selecType == 0) {
                     if (plateau[joueur->posY][joueur->posX].isEmpty == true) {
                         *posX = joueur->posX;
@@ -530,24 +531,33 @@ void CaseSelector2(int n,int p,int x,struct Case plateau[n][n], struct Joueur *j
                         clearScreen();
                         hasSelected = true;
                     }
+                    //Si on veut sélectionenr le pion à déplacer
                 }else if (selecType == 1){
                     if (plateau[joueur->posY][joueur->posX].isEmpty == false && plateau[joueur->posY][joueur->posX].pion->equipe->equipe == joueur->equipe){
                         *posX = joueur->posX;
                         *posY = joueur->posY;
                         hasSelected = true;
                     }
+                    //Si on veut sélectionner la case de destination
                 }else{
-                    //Change la position du pion de la coordonnee (Y,X) a la coordonnee (joueur->posY,joueur->posX)
+                    //Change la position du pion de la coordonnee (Y,X) a la coordonnee (joueur->posY,joueur->posX),
                     if (plateau[joueur->posY][joueur->posX].isEmpty == true) {
-                        plateau[joueur->posY][joueur->posX].pion = plateau[*posY][*posX].pion;
-                        plateau[joueur->posY][joueur->posX].isEmpty = false;
-                        plateau[*posY][*posX].isEmpty = true;
-                        plateau[*posY][*posX].pion = NULL;
-                        *posX = joueur->posX;
-                        *posY = joueur->posY;
-                        clearScreen();
-                        affichagePlateau(n,p,plateau,joueur,0,gamePhase);
-                        hasSelected = true;
+                        //on vérifie que la case sélectionnée se situe bien dans lun rayon de 1 autour du pion
+                        if (abs(*posX - joueur->posX) <= 1 && abs(*posY - joueur->posY) <= 1) {
+
+                            plateau[joueur->posY][joueur->posX].pion = plateau[*posY][*posX].pion;
+                            plateau[joueur->posY][joueur->posX].isEmpty = false;
+                            plateau[*posY][*posX].isEmpty = true;
+                            plateau[*posY][*posX].pion = NULL;
+                            *posX = joueur->posX;
+                            *posY = joueur->posY;
+                            clearScreen();
+                            affichagePlateau(n, p, plateau, joueur, 0, gamePhase);
+                            hasSelected = true;
+                        }
+
+
+
                     }
                 }
                 pressedScore = 0;
